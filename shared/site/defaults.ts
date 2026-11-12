@@ -9,20 +9,22 @@ const btn = (label: string, href: string, variant: ButtonConfig['variant'] = 'pr
 });
 
 export const DEFAULT_SECTION_STYLE: SectionStyle = {
-  paddingY: 'lg', background: 'none', align: 'center', width: 'normal', animation: 'rise', accent: '',
+  paddingY: 'lg', background: 'none', align: 'left', width: 'normal', animation: 'assemble', accent: '',
 };
 
 export const DEFAULT_SECTION_PROPS: { [K in SectionType]: SectionProps<K> } = {
   hero: {
-    eyebrow: 'Websites · Mobile apps · Business software',
+    eyebrow: 'Independent software studio · Philippines',
     headline: 'Your ideas. Beautifully built.',
-    gradientHeadline: true,
+    gradientHeadline: false,
+    twoTone: true,
+    showCursors: true,
     subtitle:
       'DevMart designs and develops affordable custom websites, mobile applications, booking systems and business software for Filipino entrepreneurs, creators and growing teams.',
     primaryButton: btn('Start a Project', '/start-a-project'),
     secondaryButton: btn('Explore Portfolio', '/portfolio', 'secondary'),
-    chips: ['Starts at ₱5,000', 'Mobile-first', 'Built in the Philippines'],
-    visual: 'devices',
+    chips: ['From ₱5,000', 'Websites & apps', 'Mobile-first', 'Made in PH'],
+    visual: 'sculpture',
     imageUrl: '',
     imageAlt: '',
     backgroundImageUrl: '',
@@ -153,7 +155,7 @@ export function makeSection<T extends SectionType>(
 }
 
 const header = (id: string, eyebrow: string, title: string, subtitle: string) =>
-  makeSection('pageHeader', id, { eyebrow, title, subtitle }, { paddingY: 'md', animation: 'fade' });
+  makeSection('pageHeader', id, { eyebrow, title, subtitle }, { paddingY: 'md', animation: 'assemble' });
 
 const PRIVACY_BLOCKS = [
   { id: 'pp1', heading: 'Who we are', body: 'DevMart is a Philippines-based provider of custom websites, mobile applications, booking systems and business software. This policy explains how we collect, use and protect your personal information in line with the Data Privacy Act of 2012 (Republic Act No. 10173).' },
@@ -183,7 +185,7 @@ const PAGES: Record<PageSlug, Page> = {
   home: {
     title: 'Home',
     sections: [
-      makeSection('hero', 'home-hero', {}, { paddingY: 'xl', animation: 'rise' }),
+      makeSection('hero', 'home-hero', {}, { paddingY: 'md', animation: 'assemble' }),
       makeSection('services', 'home-services'),
       makeSection('portfolio', 'home-portfolio'),
       makeSection('benefits', 'home-benefits'),
@@ -200,7 +202,7 @@ const PAGES: Record<PageSlug, Page> = {
       header('services-header', 'Services', 'What we build', 'Websites, systems and mobile apps designed around how your business actually works.'),
       makeSection('services', 'services-grid', { eyebrow: '', title: '', subtitle: '', limit: 0, button: btn('', '', 'secondary', false) }, { paddingY: 'sm' }),
       makeSection('process', 'services-process'),
-      makeSection('cta', 'services-cta', {}, { background: 'glass' }),
+      makeSection('cta', 'services-cta'),
     ],
   },
   pricing: {
@@ -209,7 +211,7 @@ const PAGES: Record<PageSlug, Page> = {
       header('pricing-header', 'Pricing', 'Clear starting prices', 'No hidden fees. You get a written quotation before you pay anything.'),
       makeSection('pricing', 'pricing-table', { eyebrow: '', title: '', subtitle: '' }, { paddingY: 'sm' }),
       makeSection('faq', 'pricing-faq', {}, { width: 'narrow' }),
-      makeSection('cta', 'pricing-cta', {}, { background: 'glass' }),
+      makeSection('cta', 'pricing-cta'),
     ],
   },
   portfolio: {
@@ -217,7 +219,7 @@ const PAGES: Record<PageSlug, Page> = {
     sections: [
       header('portfolio-header', 'Portfolio', 'Our work', 'Projects and concept builds that show what we can create for you.'),
       makeSection('portfolio', 'portfolio-grid', { eyebrow: '', title: '', subtitle: '', featuredOnly: false, limit: 0, button: btn('', '', 'secondary', false) }, { paddingY: 'sm' }),
-      makeSection('cta', 'portfolio-cta', {}, { background: 'glass' }),
+      makeSection('cta', 'portfolio-cta'),
     ],
   },
   about: {
@@ -231,7 +233,7 @@ const PAGES: Record<PageSlug, Page> = {
         imageSide: 'right',
       }),
       makeSection('benefits', 'about-benefits'),
-      makeSection('cta', 'about-cta', {}, { background: 'glass' }),
+      makeSection('cta', 'about-cta'),
     ],
   },
   'start-a-project': {
@@ -260,7 +262,7 @@ const PAGES: Record<PageSlug, Page> = {
     sections: [
       header('faq-header', 'FAQ', 'Questions, answered', 'Everything you need to know before starting a project with us.'),
       makeSection('faq', 'faq-list', { eyebrow: '', title: '', subtitle: '' }, { paddingY: 'sm', width: 'narrow' }),
-      makeSection('cta', 'faq-cta', { title: 'Still have questions?', text: 'Send us a message and we will help you out.', primaryButton: btn('Contact us', '/contact') , secondaryButton: btn('', '', 'secondary', false) }, { background: 'glass' }),
+      makeSection('cta', 'faq-cta', { title: 'Still have questions?', text: 'Send us a message and we will help you out.', primaryButton: btn('Contact us', '/contact') , secondaryButton: btn('', '', 'secondary', false) }, {}),
     ],
   },
   contact: {
@@ -290,14 +292,15 @@ export const DEFAULT_SITE: SiteDoc = {
   theme: {
     colors: {
       background: '#000000', surface: '#0a0c11', text: '#f5f7fa', muted: '#9aa4b2',
-      accent: '#3b9eff', accent2: '#c7d2e3',
+      accent: '#2f6bff', accent2: '#c7d2e3',
     },
-    gradient: { from: '#ffffff', via: '#9cc9ff', to: '#3b9eff', angle: 100, animated: true },
-    background: { style: 'aurora', intensity: 60, animated: true },
+    gradient: { from: '#ffffff', via: '#9cc9ff', to: '#2f6bff', angle: 100, animated: true },
+    labels: { mono: true, numbered: true, rules: true },
+    background: { style: 'spotlight', intensity: 35, animated: true },
     fonts: { heading: 'system', body: 'system' },
     scale: { base: 16, heading: 1 },
     glass: { opacity: 6, blur: 24, border: 12, saturation: 160 },
-    radius: { card: 24, button: 999 },
+    radius: { card: 18, button: 10 },
     shadow: { intensity: 55 },
   },
   brand: {
@@ -359,7 +362,7 @@ export const DEFAULT_SITE: SiteDoc = {
     copyright: '© {year} DevMart. All rights reserved.',
     showContact: true,
   },
-  buttons: { size: 'md', style: 'gradient', hover: 'glow', animation: 'shine', uppercase: false },
+  buttons: { size: 'md', style: 'white', hover: 'lift', animation: 'none', uppercase: false },
   forms: {
     order: {
       stepLabels: ['Service', 'Requirements', 'Your details', 'Review', 'Done'],

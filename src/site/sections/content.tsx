@@ -12,6 +12,7 @@ import { cx } from '@/lib/utils';
 import { Btn, Field, Glass, Notice } from '@/ui';
 import { Turnstile } from '../Turnstile';
 import { ContactList, SiteButton, SiteLink } from '../chrome';
+import { Assemble, DriftingCursors, Sculpture } from '../fx';
 import { SiteIcon } from '../icons';
 import { useSite } from '../SiteContext';
 
@@ -60,43 +61,46 @@ function DevicesVisual() {
 }
 
 export function HeroSection({ id, props, align }: P<'hero'>) {
-  const { site } = useSite();
+  const { site, editing } = useSite();
   const image = safeImage(props.imageUrl);
   const bg = safeImage(props.backgroundImageUrl);
-  const hasVisual = props.visual === 'devices' || props.visual === 'orb' || (props.visual === 'image' && image);
+  const hasVisual = props.visual === 'devices' || props.visual === 'orb' || props.visual === 'sculpture' || (props.visual === 'image' && image);
   const split = hasVisual && align === 'left';
-  const minH = { auto: '', tall: 'min-h-[min(78dvh,760px)]', screen: 'min-h-[calc(100dvh-5rem)]' }[props.height];
-  const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } };
-  const item = { hidden: { opacity: 0, y: 22, filter: 'blur(6px)' }, show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.2, 0.8, 0.2, 1] as const } } };
+  const minH = { auto: '', tall: 'min-h-[min(74dvh,720px)]', screen: 'min-h-[calc(100dvh-5rem)]' }[props.height];
+  // two-tone: first sentence bright, the rest muted on its own line
+  const cut = props.twoTone ? props.headline.search(/[.!?]\s/) : -1;
+  const first = cut > 0 ? props.headline.slice(0, cut + 1) : props.headline;
+  const rest = cut > 0 ? props.headline.slice(cut + 2) : '';
+  const gradient = cx(props.gradientHeadline && 'gradient-text', props.gradientHeadline && site.theme.gradient.animated && 'gradient-animated');
+  const text = (
+    <div className={cx('min-w-0', align === 'center' && 'mx-auto max-w-4xl text-center')}>
+      {props.eyebrow && (
+        <p data-edit={`section:${id}:eyebrow`} className="dm-mono mb-6 flex max-w-full items-center gap-2.5 uppercase">
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
+          <span className={cx('min-w-0', align === 'center' && 'mx-auto')}>{props.eyebrow}</span>
+        </p>
+      )}
+      <h1 data-edit={`section:${id}:headline`} className="h-display">
+        <span className={gradient}>{first}</span>
+        {rest && <span className="block text-ink/45">{rest}</span>}
+      </h1>
+      {props.subtitle && <p data-edit={`section:${id}:subtitle`} className={cx('mt-6 max-w-xl text-base leading-relaxed text-ink/70 sm:text-lg', align === 'center' && 'mx-auto')}>{props.subtitle}</p>}
+      <div className={cx('mt-8 flex flex-wrap gap-3', align === 'center' && 'justify-center')}>
+        <SiteButton config={props.primaryButton} edit={`section:${id}:primaryButton`} size="lg" arrow />
+        <SiteButton config={props.secondaryButton} edit={`section:${id}:secondaryButton`} size="lg" />
+      </div>
+    </div>
+  );
   return (
-    <div className={cx('relative flex items-center', minH)}>
+    <div className={cx('relative flex flex-col justify-center', minH)}>
       {bg && <div className="absolute inset-0 -z-10 overflow-hidden rounded-[var(--dm-radius-card)]"><img src={bg} alt="" className="h-full w-full object-cover opacity-40" /><div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-[var(--dm-bg)]" /></div>}
-      <div className={cx('grid w-full items-center gap-12', split ? 'lg:grid-cols-2' : 'grid-cols-1')}>
-        <motion.div variants={stagger} initial="hidden" animate="show" className={cx('min-w-0', align === 'center' && 'mx-auto max-w-4xl text-center')}>
-          {props.eyebrow && (
-            <motion.p variants={item} data-edit={`section:${id}:eyebrow`} className="glass-soft mb-6 inline-flex max-w-full items-center gap-2 !rounded-full px-4 py-1.5 text-sm text-ink/85">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent shadow-[0_0_12px_var(--dm-accent)]" />
-              <span className="truncate">{props.eyebrow}</span>
-            </motion.p>
-          )}
-          <motion.h1 variants={item} data-edit={`section:${id}:headline`}
-            className={cx('h-display', props.gradientHeadline && 'gradient-text', props.gradientHeadline && site.theme.gradient.animated && 'gradient-animated')}>
-            {props.headline}
-          </motion.h1>
-          {props.subtitle && <motion.p variants={item} data-edit={`section:${id}:subtitle`} className={cx('mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl', align === 'center' && 'mx-auto')}>{props.subtitle}</motion.p>}
-          <motion.div variants={item} className={cx('mt-9 flex flex-wrap gap-3', align === 'center' && 'justify-center')}>
-            <SiteButton config={props.primaryButton} edit={`section:${id}:primaryButton`} size="lg" arrow />
-            <SiteButton config={props.secondaryButton} edit={`section:${id}:secondaryButton`} size="lg" />
-          </motion.div>
-          {props.chips.length > 0 && (
-            <motion.ul variants={item} data-edit={`section:${id}:chips`} className={cx('mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted', align === 'center' && 'justify-center')}>
-              {props.chips.map((c, i) => <li key={i} className="flex items-center gap-1.5"><Check className="h-4 w-4 text-accent" aria-hidden />{c}</li>)}
-            </motion.ul>
-          )}
-        </motion.div>
+      {props.showCursors && <DriftingCursors />}
+      <div className={cx('grid w-full items-center gap-10 py-8', split ? 'lg:grid-cols-[1.25fr_1fr]' : 'grid-cols-1')}>
+        <Assemble disabled={editing} seed={1}>{text}</Assemble>
         {hasVisual && (
-          <motion.div initial={{ opacity: 0, scale: 0.94, y: 30 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.25, ease: [0.2, 0.8, 0.2, 1] }}
+          <motion.div initial={editing ? false : { opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
             className={cx('min-w-0', !split && 'mx-auto w-full max-w-3xl')} data-edit={`section:${id}:visual`}>
+            {props.visual === 'sculpture' && <Sculpture />}
             {props.visual === 'devices' && <DevicesVisual />}
             {props.visual === 'orb' && (
               <div className="relative mx-auto aspect-square w-full max-w-sm" aria-hidden>
@@ -108,6 +112,13 @@ export function HeroSection({ id, props, align }: P<'hero'>) {
           </motion.div>
         )}
       </div>
+      {props.chips.length > 0 && (
+        <ul data-edit={`section:${id}:chips`} className={cx('mt-4 grid grid-cols-2 gap-x-8 gap-y-4 border-b border-accent/70 pb-5 sm:flex sm:flex-wrap', align === 'center' ? 'sm:justify-center' : 'sm:justify-between')}>
+          {props.chips.map((c, i) => (
+            <li key={i}><span className="dm-mono block uppercase">{String(i + 1).padStart(2, '0')}</span><span className="mt-1 block text-lg font-semibold tracking-tight sm:text-xl">{c}</span></li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
@@ -240,7 +251,7 @@ export function ProcessSection({ id, props, align }: P<'process'>) {
   return (
     <>
       <Heading id={id} {...props} align={align} />
-      <ol className="relative mx-auto grid max-w-5xl gap-4 text-left sm:grid-cols-2 lg:grid-cols-3" data-edit={`section:${id}:items`}>
+      <ol className="relative grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-3" data-edit={`section:${id}:items`}>
         {props.items.map((s, i) => (
           <li key={s.id}>
             <Glass className="flex h-full gap-4 p-5">
@@ -339,7 +350,7 @@ export function FaqSection({ id, props, align }: P<'faq'>) {
   return (
     <>
       <Heading id={id} {...props} align={align} />
-      <div className="mx-auto max-w-3xl space-y-3 text-left" data-edit={`section:${id}:items`}>
+      <div className={cx('max-w-3xl space-y-3 text-left', align === 'center' && 'mx-auto')} data-edit={`section:${id}:items`}>
         {props.items.map((f) => {
           const isOpen = open === f.id;
           return (
@@ -401,7 +412,7 @@ export function ContactSection({ id, props, align }: P<'contact'>) {
   return (
     <>
       <Heading id={id} {...props} align={align} />
-      <div className={cx('mx-auto grid gap-6 text-left', hasDetails && props.showForm ? 'max-w-5xl lg:grid-cols-[1fr_1.5fr]' : 'max-w-2xl')}>
+      <div className={cx('grid gap-6 text-left', align === 'center' && 'mx-auto', hasDetails && props.showForm ? 'max-w-5xl lg:grid-cols-[1fr_1.5fr]' : 'max-w-2xl')}>
         {hasDetails && <Glass className="p-6"><h3 className="h-card mb-4">Reach us directly</h3><ContactList /></Glass>}
         {props.showForm && <Glass className="relative overflow-hidden p-6"><ContactForm /></Glass>}
       </div>
@@ -410,12 +421,12 @@ export function ContactSection({ id, props, align }: P<'contact'>) {
 }
 
 // ───────── CTA / rich text / image + text ─────────
-export function CtaSection({ id, props }: P<'cta'>) {
+export function CtaSection({ id, props, align }: P<'cta'>) {
   return (
-    <div className="mx-auto max-w-3xl text-center">
-      <h2 className="h-section" data-edit={`section:${id}:title`}>{props.title}</h2>
-      {props.text && <p className="mt-4 text-lg text-muted" data-edit={`section:${id}:text`}>{props.text}</p>}
-      <div className="mt-8 flex flex-wrap justify-center gap-3">
+    <div className={cx('dm-brackets', align === 'center' && 'mx-auto max-w-3xl text-center')}>
+      <h2 className="h-section max-w-3xl" data-edit={`section:${id}:title`}>{props.title}</h2>
+      {props.text && <p className={cx('mt-4 max-w-2xl text-lg text-muted', align === 'center' && 'mx-auto')} data-edit={`section:${id}:text`}>{props.text}</p>}
+      <div className={cx('mt-8 flex flex-wrap gap-3', align === 'center' && 'justify-center')}>
         <SiteButton config={props.primaryButton} edit={`section:${id}:primaryButton`} size="lg" arrow />
         <SiteButton config={props.secondaryButton} edit={`section:${id}:secondaryButton`} size="lg" />
       </div>

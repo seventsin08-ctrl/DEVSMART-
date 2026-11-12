@@ -37,11 +37,13 @@ export const SECTION_FIELDS: Record<SectionType, F[]> = {
     { key: 'eyebrow', label: 'Badge text', type: 'text' },
     { key: 'headline', label: 'Headline', type: 'textarea', rows: 2 },
     { key: 'gradientHeadline', label: 'Gradient headline', type: 'bool' },
+    { key: 'twoTone', label: 'Two-tone headline', type: 'bool', hint: 'First sentence bright, the rest muted.' },
+    { key: 'showCursors', label: 'Floating cursors', type: 'bool' },
     { key: 'subtitle', label: 'Subtitle', type: 'textarea', rows: 3 },
     button('primaryButton', 'Primary button'),
     button('secondaryButton', 'Secondary button'),
     { key: 'chips', label: 'Highlights under the buttons', type: 'strings', maxItems: 8 },
-    { key: 'visual', label: 'Hero visual', type: 'select', options: [{ value: 'devices', label: 'Floating devices' }, { value: 'orb', label: 'Glass orb' }, { value: 'image', label: 'Your image' }, { value: 'none', label: 'None' }] },
+    { key: 'visual', label: 'Hero visual', type: 'select', options: [{ value: 'sculpture', label: '3D glass sculpture' }, { value: 'devices', label: 'Floating devices' }, { value: 'orb', label: 'Glass orb' }, { value: 'image', label: 'Your image' }, { value: 'none', label: 'None' }] },
     { key: 'imageUrl', label: 'Hero image', type: 'image', hint: 'Used when "Your image" is selected.' },
     { key: 'imageAlt', label: 'Image description', type: 'text' },
     { key: 'backgroundImageUrl', label: 'Background image', type: 'image' },
@@ -130,7 +132,7 @@ export const STYLE_FIELDS: F[] = [
   { key: 'paddingY', label: 'Vertical spacing', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'sm', label: 'Small' }, { value: 'md', label: 'Medium' }, { value: 'lg', label: 'Large' }, { value: 'xl', label: 'Extra large' }] },
   { key: 'width', label: 'Content width', type: 'select', options: [{ value: 'narrow', label: 'Narrow' }, { value: 'normal', label: 'Normal' }, { value: 'wide', label: 'Wide' }] },
   { key: 'background', label: 'Section background', type: 'select', options: [{ value: 'none', label: 'Transparent' }, { value: 'glass', label: 'Glass panel' }, { value: 'tint', label: 'Colour tint' }, { value: 'glow', label: 'Glow' }] },
-  { key: 'animation', label: 'Entrance animation', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'fade', label: 'Fade' }, { value: 'rise', label: 'Rise' }, { value: 'scale', label: 'Scale' }, { value: 'blur', label: 'Blur in' }] },
+  { key: 'animation', label: 'Entrance animation', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'fade', label: 'Fade' }, { value: 'rise', label: 'Rise' }, { value: 'scale', label: 'Scale' }, { value: 'blur', label: 'Blur in' }, { value: 'assemble', label: 'Assemble (design-tool effect)' }] },
   { key: 'accent', label: 'Accent colour for this section', type: 'color', allowEmptyColor: true, hint: 'Leave empty to use the brand accent.' },
 ];
 
@@ -150,6 +152,11 @@ export const THEME_FIELDS: F[] = [
     { key: 'from', label: 'Start', type: 'color' }, { key: 'via', label: 'Middle', type: 'color' }, { key: 'to', label: 'End', type: 'color' },
     { key: 'angle', label: 'Angle', type: 'range', min: 0, max: 360, step: 5, unit: '°' },
     { key: 'animated', label: 'Animate gradient', type: 'bool' },
+  ]),
+  group('labels', 'Section labels & rules', [
+    { key: 'mono', label: 'Monospace labels', type: 'bool' },
+    { key: 'numbered', label: 'Number the sections', type: 'bool' },
+    { key: 'rules', label: 'Thin accent lines between sections', type: 'bool' },
   ]),
   group('background', 'Background', [
     { key: 'style', label: 'Style', type: 'select', options: [{ value: 'aurora', label: 'Aurora glow' }, { value: 'mesh', label: 'Mesh glow' }, { value: 'grid', label: 'Grid' }, { value: 'spotlight', label: 'Spotlight' }, { value: 'solid', label: 'Solid colour' }] },
@@ -225,7 +232,7 @@ export const FOOTER_FIELDS: F[] = [
 
 export const BUTTONS_FIELDS: F[] = [
   { key: 'size', label: 'Default size', type: 'select', options: [{ value: 'sm', label: 'Small' }, { value: 'md', label: 'Medium' }, { value: 'lg', label: 'Large' }] },
-  { key: 'style', label: 'Primary button style', type: 'select', options: [{ value: 'gradient', label: 'Gradient' }, { value: 'solid', label: 'Solid' }, { value: 'glass', label: 'Glass' }] },
+  { key: 'style', label: 'Primary button style', type: 'select', options: [{ value: 'white', label: 'White' }, { value: 'gradient', label: 'Gradient' }, { value: 'solid', label: 'Solid' }, { value: 'glass', label: 'Glass' }] },
   { key: 'hover', label: 'Hover effect', type: 'select', options: [{ value: 'glow', label: 'Glow' }, { value: 'lift', label: 'Lift' }, { value: 'scale', label: 'Scale' }, { value: 'none', label: 'None' }] },
   { key: 'animation', label: 'Animation', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'shine', label: 'Shine sweep' }, { value: 'pulse', label: 'Pulse' }] },
   { key: 'uppercase', label: 'Uppercase labels', type: 'bool' },

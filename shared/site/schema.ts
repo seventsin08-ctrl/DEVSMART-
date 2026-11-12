@@ -77,6 +77,7 @@ export const themeSchema = z.object({
     angle: z.number().min(0).max(360),
     animated: z.boolean(),
   }),
+  labels: z.object({ mono: z.boolean(), numbered: z.boolean(), rules: z.boolean() }),
   background: z.object({
     style: z.enum(['aurora', 'mesh', 'grid', 'spotlight', 'solid']),
     intensity: z.number().min(0).max(100),
@@ -109,7 +110,7 @@ export type ButtonConfig = z.infer<typeof buttonSchema>;
 
 export const buttonsSchema = z.object({
   size: z.enum(['sm', 'md', 'lg']),
-  style: z.enum(['gradient', 'solid', 'glass']),
+  style: z.enum(['gradient', 'solid', 'glass', 'white']),
   hover: z.enum(['glow', 'lift', 'scale', 'none']),
   animation: z.enum(['none', 'shine', 'pulse']),
   uppercase: z.boolean(),
@@ -196,7 +197,7 @@ export const sectionStyleSchema = z.object({
   background: z.enum(['none', 'glass', 'tint', 'glow']),
   align: z.enum(['left', 'center']),
   width: z.enum(['narrow', 'normal', 'wide']),
-  animation: z.enum(['none', 'fade', 'rise', 'scale', 'blur']),
+  animation: z.enum(['none', 'fade', 'rise', 'scale', 'blur', 'assemble']),
   accent: z.union([z.literal(''), hexColor]),
 });
 export type SectionStyle = z.infer<typeof sectionStyleSchema>;
@@ -208,11 +209,13 @@ export const sectionPropsSchemas = {
     eyebrow: text(80),
     headline: text(160),
     gradientHeadline: z.boolean(),
+    twoTone: z.boolean(),
+    showCursors: z.boolean(),
     subtitle: text(500),
     primaryButton: buttonSchema,
     secondaryButton: buttonSchema,
     chips: z.array(text(40)).max(8),
-    visual: z.enum(['orb', 'devices', 'image', 'none']),
+    visual: z.enum(['sculpture', 'orb', 'devices', 'image', 'none']),
     imageUrl,
     imageAlt: text(160),
     backgroundImageUrl: imageUrl,

@@ -6,6 +6,7 @@ import type { PageSlug, Section, SectionStyle, SectionType } from '@shared/site/
 import { cx } from '@/lib/utils';
 import { Spinner } from '@/ui';
 import { Footer, Nav } from './chrome';
+import { Assemble } from './fx';
 import { useSite } from './SiteContext';
 import {
   BenefitsSection, ContactSection, CtaSection, FaqSection, HeroSection, ImageTextSection, PageHeaderSection,
@@ -32,9 +33,10 @@ const ANIM = {
   rise: { hidden: { opacity: 0, y: 36 }, show: { opacity: 1, y: 0 } },
   scale: { hidden: { opacity: 0, scale: 0.94 }, show: { opacity: 1, scale: 1 } },
   blur: { hidden: { opacity: 0, filter: 'blur(14px)' }, show: { opacity: 1, filter: 'blur(0px)' } },
+  assemble: null,
 } as const;
 
-function SectionShell({ section, children }: { section: Section; children: ReactNode }) {
+function SectionShell({ section, children, index }: { section: Section; children: ReactNode; index: number }) {
   const { editing } = useSite();
   const { style } = section;
   const anim = section.type === 'hero' ? null : ANIM[style.animation];
@@ -45,7 +47,8 @@ function SectionShell({ section, children }: { section: Section; children: React
       style.background === 'tint' && 'rounded-[var(--dm-radius-card)] bg-[color-mix(in_srgb,var(--dm-accent)_8%,transparent)] px-5 py-10 sm:px-10 sm:py-14',
       style.background === 'glow' && 'relative')}>
       {style.background === 'glow' && <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-10 -z-10 mx-auto h-72 max-w-3xl rounded-full bg-[color-mix(in_srgb,var(--dm-accent)_22%,transparent)] blur-[90px]" />}
-      {children}
+      {style.animation === 'assemble' && section.type !== 'hero' && !['orderForm', 'trackOrder', 'payment'].includes(section.type)
+        ? <Assemble disabled={editing} seed={index}>{children}</Assemble> : children}
     </div>
   );
   return (
@@ -64,10 +67,10 @@ export function SectionList({ sections }: { sections: Section[] }) {
   const { editing } = useSite();
   return (
     <>
-      {sections.filter((s) => s.visible || editing).map((s) => {
+      {sections.filter((s) => s.visible || editing).map((s, index) => {
         const Component = COMPONENTS[s.type];
         return (
-          <SectionShell key={s.id} section={s}>
+          <SectionShell key={s.id} section={s} index={index}>
             <Suspense fallback={<Spinner />}><Component id={s.id} props={s.props} align={s.style.align} /></Suspense>
           </SectionShell>
         );
@@ -81,7 +84,7 @@ export function PageView({ slug }: { slug: PageSlug }) {
   const { site, editing } = useSite();
   const page = site.pages[slug];
   return (
-    <div className={cx('relative min-h-dvh', editing && 'dm-editing')} style={themeVars(site.theme)}>
+    <div className={cx('relative min-h-dvh', editing && 'dm-editing', site.theme.labels.mono && 'dm-mono-labels', site.theme.labels.numbered && 'dm-numbered', site.theme.labels.rules && 'dm-rules')} style={themeVars(site.theme)}>
       <Backdrop theme={site.theme} />
       <div className="relative z-10 flex min-h-dvh flex-col">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-black">Skip to content</a>

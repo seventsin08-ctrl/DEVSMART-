@@ -201,3 +201,61 @@ input[type="date"].field { color-scheme: dark; }
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .btn-anim-shine::after { display: none; }
 }
+
+/* ───────── Studio look: mono labels, numbered sections, accent rules ───────── */
+.dm-mono-labels .eyebrow, .dm-mono { font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; font-size: .72rem; letter-spacing: .16em; font-weight: 500; color: color-mix(in srgb, var(--dm-text) 62%, transparent); }
+.dm-numbered main { counter-reset: dm-sec; }
+.dm-numbered main section:has(.eyebrow) { counter-increment: dm-sec; }
+.dm-numbered .eyebrow::before { content: "[" counter(dm-sec, decimal-leading-zero) "]"; margin-right: .7em; color: var(--dm-accent); font-weight: 700; }
+.dm-rules main section + section::before {
+  content: ""; position: absolute; top: 0; left: max(1rem, calc((100% - 72rem) / 2)); right: max(1rem, calc((100% - 72rem) / 2)); height: 1px;
+  background: linear-gradient(90deg, var(--dm-accent), color-mix(in srgb, var(--dm-accent) 25%, transparent) 55%, transparent);
+  opacity: .55;
+}
+.btn-primary.btn-style-white { background: #fff; color: #05070c; border-color: #fff; box-shadow: 0 8px 30px -14px rgb(255 255 255 / .55); }
+.dm-brackets { position: relative; padding: clamp(1.5rem, 4vw, 3rem); }
+.dm-brackets::before, .dm-brackets::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1.5px solid color-mix(in srgb, var(--dm-text) 45%, transparent); }
+.dm-brackets::before { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+.dm-brackets::after { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+/* ───────── "Assemble" entrance: a selection box, a size tag and cursors place the section ───────── */
+.dm-asm { position: relative; }
+.dm-asm-content { opacity: 0; }
+.dm-asm.in .dm-asm-content { animation: dm-asm-content .65s cubic-bezier(.2,.8,.2,1) .28s both; }
+.dm-asm-box { position: absolute; inset: -8px; pointer-events: none; opacity: 0; z-index: 5; border: 1.5px solid var(--dm-accent); background: color-mix(in srgb, var(--dm-accent) 7%, transparent); transform-origin: 0 0; }
+.dm-asm-box i { position: absolute; width: 7px; height: 7px; background: #fff; border: 1.5px solid var(--dm-accent); }
+.dm-asm-box i:nth-child(1) { top: -4px; left: -4px; } .dm-asm-box i:nth-child(2) { top: -4px; right: -4px; }
+.dm-asm-box i:nth-child(3) { bottom: -4px; left: -4px; } .dm-asm-box i:nth-child(4) { bottom: -4px; right: -4px; }
+.dm-asm-box b { position: absolute; left: 50%; bottom: -22px; transform: translateX(-50%); background: var(--dm-accent); color: #fff; font: 600 10px/1 ui-monospace, Menlo, Consolas, monospace; padding: 3px 6px; border-radius: 3px; white-space: nowrap; }
+.dm-asm.in .dm-asm-box { animation: dm-asm-box 1.15s cubic-bezier(.3,.9,.3,1) both; }
+.dm-cursor { position: absolute; width: 18px; height: 18px; pointer-events: none; z-index: 6; opacity: 0; filter: drop-shadow(0 2px 6px rgb(0 0 0 / .5)); }
+.dm-asm.in .dm-cursor { animation: dm-cursor-in 1.25s cubic-bezier(.3,.9,.3,1) both; }
+.dm-asm .dm-cursor:nth-of-type(1) { right: -14px; bottom: -18px; --cx: 160px; --cy: 90px; }
+.dm-asm .dm-cursor:nth-of-type(2) { left: 30%; top: -6px; --cx: -120px; --cy: -70px; animation-delay: .12s !important; }
+@keyframes dm-asm-content { from { opacity: 0; transform: translateY(8px); filter: blur(5px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes dm-asm-box { 0% { opacity: 0; transform: scale(.25, .2); } 18% { opacity: 1; } 55% { opacity: 1; transform: none; } 80% { opacity: 1; } 100% { opacity: 0; transform: none; } }
+@keyframes dm-cursor-in { 0% { opacity: 0; transform: translate(var(--cx), var(--cy)); } 20% { opacity: 1; } 55% { transform: none; opacity: 1; } 82% { opacity: 1; } 100% { opacity: 0; transform: translate(6px, 8px); } }
+.dm-drift { position: absolute; width: 16px; height: 16px; opacity: .85; animation: dm-drift 9s ease-in-out infinite alternate; will-change: transform; }
+@keyframes dm-drift { from { transform: translate(0, 0) rotate(-4deg); } to { transform: translate(var(--dx, 30px), var(--dy, -22px)) rotate(6deg); } }
+
+/* ───────── 3D sculpture (pure CSS) ───────── */
+.dm-sculpt { position: relative; width: min(100%, 360px); aspect-ratio: 1; margin-inline: auto; perspective: 900px; }
+.dm-sculpt-spin { position: absolute; inset: 0; transform-style: preserve-3d; animation: dm-sculpt 18s linear infinite; }
+.dm-ring { position: absolute; inset: 12%; border-radius: 50%; transform-style: preserve-3d;
+  background: conic-gradient(from 20deg, #0a2a8f, #2f6bff 18%, #bfe0ff 26%, #2f6bff 36%, #0b2fa8 55%, #5aa2ff 68%, #eaf4ff 74%, #1d4fe0 84%, #0a2a8f);
+  -webkit-mask: radial-gradient(closest-side, transparent 76%, #000 77.5%); mask: radial-gradient(closest-side, transparent 76%, #000 77.5%);
+  box-shadow: 0 0 60px color-mix(in srgb, var(--dm-accent) 55%, transparent); }
+.dm-ring.r1 { transform: rotateX(68deg) rotateY(10deg); }
+.dm-ring.r2 { transform: rotateY(72deg) rotateX(18deg); inset: 18%; }
+.dm-ring.r3 { transform: rotateX(28deg) rotateY(-58deg); inset: 24%; }
+.dm-pillar { position: absolute; left: 50%; top: 4%; bottom: 10%; width: 13%; transform: translateX(-50%); border-radius: 999px 999px 40% 40% / 16% 16% 8% 8%;
+  background: linear-gradient(90deg, #0b2a9a, #3f7dff 35%, #cfe6ff 50%, #2f6bff 65%, #08237d); box-shadow: 0 0 50px color-mix(in srgb, var(--dm-accent) 60%, transparent); }
+.dm-ball { position: absolute; width: 11%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #fff7c2, #ffc530 42%, #c97a00 85%); box-shadow: 0 0 22px rgb(255 190 40 / .55); }
+.dm-sculpt-glow { position: absolute; inset: 18%; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--dm-accent) 45%, transparent), transparent 70%); filter: blur(40px); }
+@keyframes dm-sculpt { to { transform: rotateY(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-asm-content { opacity: 1 !important; animation: none !important; }
+  .dm-asm-box, .dm-cursor, .dm-drift { display: none !important; }
+  .dm-sculpt-spin { animation: none !important; }
+}
