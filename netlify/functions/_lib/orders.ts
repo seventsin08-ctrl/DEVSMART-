@@ -3,7 +3,8 @@ import {
   type DocumentKind, type OrderStatus,
 } from '../../../shared/constants';
 import { formatPHP } from '../../../shared/money';
-import { DEFAULT_CONTRACT_TERMS, generateDocumentPdf, type PdfDocumentInput } from '../../../shared/pdf';
+import { DEFAULT_CONTRACT_TERMS } from '../../../shared/contract';
+import { generateDocumentPdf, type PdfDocumentInput } from '../../../shared/pdf';
 import {
   priceOrder, PricingError, type AddonRow, type PackageRow, type PricedOrder, type PromotionRow, type ServiceRow,
 } from '../../../shared/pricing';
@@ -47,12 +48,11 @@ export async function priceSelection(selection: Selection, email: string): Promi
   // customer history (drives first-order / loyalty / per-customer limits)
   let isFirstOrder = true;
   let completedOrders = 0;
-  let customerId: string | null = null;
   const redemptionsByPromo: Record<string, number> = {};
   if (email) {
     const { data: customer } = await supabase.from('customers').select('id').eq('email', email).maybeSingle();
     if (customer) {
-      customerId = customer.id as string;
+      const customerId = customer.id as string;
       const [{ count: prior }, { count: completed }, { data: redemptions }] = await Promise.all([
         supabase.from('orders').select('id', { count: 'exact', head: true }).eq('customer_id', customerId).neq('status', 'cancelled'),
         supabase.from('orders').select('id', { count: 'exact', head: true }).eq('customer_id', customerId).eq('status', 'completed'),

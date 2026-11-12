@@ -24,6 +24,7 @@ export function SiteLink({ href, children, edit, ...rest }: { href: string; edit
       <a href={safe} {...rest} {...editAttr} onClick={(e) => {
         e.preventDefault();
         if (edit) return; // selectable element: the preview's click handler selects it
+        e.stopPropagation();
         const slug = slugForHref(safe);
         if (slug) onNavigate?.(slug);
       }}>{children}</a>

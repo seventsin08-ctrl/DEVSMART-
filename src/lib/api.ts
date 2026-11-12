@@ -20,7 +20,7 @@ export async function api<T>(path: string, body: unknown, opts: { auth?: boolean
     throw new ApiError(0, 'NETWORK', 'We could not reach the server. Check your connection and try again.');
   }
   const text = await res.text();
-  let payload: { error?: { code: string; message: string; fields?: Record<string, string> } } & Record<string, unknown> = {};
+  let payload: { error?: { code: string; message: string; fields?: Record<string, string> } } & Record<string, unknown>;
   try {
     payload = text ? JSON.parse(text) : {};
   } catch {

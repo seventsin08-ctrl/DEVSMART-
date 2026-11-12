@@ -10,6 +10,7 @@ export const hexColor = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a hex colour 
 export function isSafeHref(value: string): boolean {
   const v = value.trim();
   if (v === '') return true;
+  // eslint-disable-next-line no-control-regex
   if (/[\u0000-\u001f\u007f<>"`]/.test(v)) return false;
   if (v.startsWith('/') && !v.startsWith('//')) return true;
   if (v.startsWith('#')) return true;
@@ -18,6 +19,7 @@ export function isSafeHref(value: string): boolean {
 export function isSafeImageUrl(value: string): boolean {
   const v = value.trim();
   if (v === '') return true;
+  // eslint-disable-next-line no-control-regex
   if (/[\u0000-\u001f\u007f<>"`]/.test(v)) return false;
   if (v.startsWith('/') && !v.startsWith('//')) return true;
   return /^https?:\/\//i.test(v);

@@ -170,9 +170,7 @@ export function promotionProblem(promo: PromotionRow, ctx: PromoContext): PromoP
 
 /** Discount in centavos: floored, capped, never negative and never more than the subtotal. */
 export function computeDiscount(promo: PromotionRow, subtotal: number): number {
-  let discount = 0;
-  if (promo.discount_type === 'percent') discount = percentOf(subtotal, promo.percent_bps ?? 0);
-  else discount = promo.fixed_centavos ?? 0;
+  let discount = promo.discount_type === 'percent' ? percentOf(subtotal, promo.percent_bps ?? 0) : promo.fixed_centavos ?? 0;
   if (promo.max_discount_centavos !== null) discount = Math.min(discount, promo.max_discount_centavos);
   return Math.max(0, Math.min(Math.trunc(discount), subtotal));
 }

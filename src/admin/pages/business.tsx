@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { DOCUMENT_KIND_LABELS, formatDate, type DocumentKind } from '@shared/constants';
 import { centavosToInput, formatPHP } from '@shared/money';
-import { DEFAULT_CONTRACT_TERMS } from '@shared/pdf';
+import { DEFAULT_CONTRACT_TERMS } from '@shared/contract';
 import { errorMessage } from '@/lib/api';
 import { requireSupabase, unwrap } from '@/lib/supabase';
 import { copyText, cx } from '@/lib/utils';
