@@ -75,6 +75,6 @@ for f in ../../supabase/migrations/*.sql; do echo "  $(basename "$f")"; $PSQL_PG
 $PSQL -c "notify pgrst, 'reload schema'" >/dev/null
 
 pkill -f "dev/stack/gateway.mjs" 2>/dev/null || true
-nohup node "$(pwd)/gateway.mjs" > gateway.log 2>&1 &
+(setsid nohup node "$(pwd)/gateway.mjs" > gateway.log 2>&1 &)
 sleep 1
 echo "local stack ready → http://127.0.0.1:54321  (keys in dev/stack/$ENV_FILE)"
