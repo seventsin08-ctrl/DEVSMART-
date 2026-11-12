@@ -84,7 +84,7 @@ export function PageView({ slug }: { slug: PageSlug }) {
   const { site, editing } = useSite();
   const page = site.pages[slug];
   return (
-    <div className={cx('relative min-h-dvh', editing && 'dm-editing', site.theme.labels.mono && 'dm-mono-labels', site.theme.labels.numbered && 'dm-numbered', site.theme.labels.rules && 'dm-rules')} style={themeVars(site.theme)}>
+    <div className={cx('relative min-h-dvh overflow-x-clip', editing && 'dm-editing', site.theme.labels.mono && 'dm-mono-labels', site.theme.labels.numbered && 'dm-numbered', site.theme.labels.rules && 'dm-rules')} style={themeVars(site.theme)}>
       <Backdrop theme={site.theme} />
       <div className="relative z-10 flex min-h-dvh flex-col">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-black">Skip to content</a>
