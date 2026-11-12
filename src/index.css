@@ -40,6 +40,7 @@
   --dm-font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+@layer base {
 html { background: #000; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -56,7 +57,10 @@ p { text-wrap: pretty; }
 ::selection { background: color-mix(in srgb, var(--dm-accent) 45%, transparent); color: #fff; }
 :focus-visible { outline: 2px solid var(--dm-accent); outline-offset: 2px; border-radius: 6px; }
 img, video { max-width: 100%; }
+}
 
+/* Component classes live in the components layer so Tailwind utilities (fixed, sticky, absolute…) can override them. */
+@layer components {
 /* ───────── Liquid glass ───────── */
 .glass {
   position: relative;
@@ -258,4 +262,5 @@ input[type="date"].field { color-scheme: dark; }
   .dm-asm-content { opacity: 1 !important; animation: none !important; }
   .dm-asm-box, .dm-cursor, .dm-drift { display: none !important; }
   .dm-sculpt-spin { animation: none !important; }
+}
 }
