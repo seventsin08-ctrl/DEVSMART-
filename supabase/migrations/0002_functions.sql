@@ -589,7 +589,8 @@ begin
   update public.theme_settings set published = draft where id = 1;
   update public.website_settings set published = draft
    where key in ('brand', 'navigation', 'footer', 'buttons', 'forms');
-  update public.website_pages set published_content = draft_content, published_at = now();
+  -- (Supabase's API roles reject UPDATE without WHERE, hence the explicit predicate)
+  update public.website_pages set published_content = draft_content, published_at = now() where slug is not null;
 
   v_doc := public.site_doc(false);
   select coalesce(max(version_number), 0) + 1 into v_version from public.website_page_versions;

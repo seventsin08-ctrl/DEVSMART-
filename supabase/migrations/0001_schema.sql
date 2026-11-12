@@ -298,8 +298,10 @@ create table public.payment_submissions (
   reviewed_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  -- a submission can only be "verified" by a named reviewer with an amount
-  check (status not in ('verified', 'refunded') or (reviewed_by is not null and verified_amount_centavos is not null))
+  -- a verified submission always carries the verified amount and the review time
+  -- (reviewed_by may become null later if that admin account is deleted)
+  constraint payment_submissions_verified_check
+    check (status not in ('verified', 'refunded') or (reviewed_at is not null and verified_amount_centavos is not null))
 );
 create index payment_submissions_order_idx on public.payment_submissions (order_id);
 create index payment_submissions_status_idx on public.payment_submissions (status);
@@ -365,7 +367,8 @@ create table public.documents (
   title text not null,
   storage_path text not null unique,
   amount_centavos bigint check (amount_centavos is null or amount_centavos >= 0),
-  payment_transaction_id uuid references public.payment_transactions (id) on delete set null,
+  -- a ledger entry that has a receipt cannot be deleted
+  payment_transaction_id uuid references public.payment_transactions (id) on delete restrict,
   is_customer_visible boolean not null default true,
   metadata jsonb not null default '{}'::jsonb,
   created_by uuid references auth.users (id) on delete set null,
