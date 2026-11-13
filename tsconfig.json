@@ -20,5 +20,5 @@
       "@shared/*": ["./shared/*"]
     }
   },
-  "include": ["src", "shared", "netlify", "scripts", "tests", "dev", "vite.config.ts", "playwright.config.ts"]
+  "include": ["src", "shared", "netlify", "scripts", "tests", "dev", "vite.config.ts", "vite.preview.config.ts", "playwright.config.ts"]
 }
