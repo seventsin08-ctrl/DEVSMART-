@@ -48,7 +48,10 @@ You need three free accounts: **GitHub** (your code is already there), **Supabas
 
 ## Part 3: First login and setup
 
-1. Open `https://your-address/admin`, sign in, and scan the QR code with an authenticator app (Google Authenticator, Microsoft Authenticator or Authy). Type the 6-digit code. This two-step check is required for every admin sign-in.
+1. Open `https://your-address/admin` and sign in. Then set up the required two-step check with an authenticator app (Google Authenticator, Microsoft Authenticator or Authy):
+   - **On a computer:** scan the QR code with the app on your phone.
+   - **Only on a phone:** you cannot scan your own screen. Tap **Open in my authenticator app**, or tap **Copy key**, open the app, choose *Add account → Enter a setup key* and paste it.
+   Then type the 6-digit code. This check is required for every admin sign-in.
 2. **Payments → Payment methods**: edit GCash, Maya and Bank Transfer with your real account name and number, upload the QR code, and switch **Available to customers** on. Until you do, customers see no payment details.
 3. **Branding Studio → Brand → Contact details**: add your email, phone, Facebook page, address and hours, then press **Publish**. Until you publish, visitors see the built-in default text.
 4. **Portfolio**: the six starter projects are labelled *Concept*. Replace them with your real work, or hide them.

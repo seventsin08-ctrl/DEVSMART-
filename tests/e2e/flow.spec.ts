@@ -195,6 +195,14 @@ test('the owner signs in with MFA, verifies the payment and a receipt is issued'
 
   await expect(page.getByText('Set up two-step verification')).toBeVisible();
   totpSecret = (await page.getByTestId('totp-secret').textContent())!.trim();
+  // phone-only setup: the key can be copied, and a real otpauth:// link exists (it is shown on small screens)
+  await expect(page.getByRole('button', { name: 'Copy key' })).toBeVisible();
+  const otpLink = page.locator('a[href^="otpauth://totp/"]');
+  await expect(otpLink).toHaveCount(1);
+  await expect(otpLink).toBeHidden(); // on a computer you scan the QR code instead
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(otpLink).toBeVisible(); // on a phone it is one tap
+  await page.setViewportSize({ width: 1366, height: 900 });
   await page.getByLabel(/6-digit code/).fill(new OTPAuth.TOTP({ secret: totpSecret }).generate());
   await page.getByRole('button', { name: 'Verify' }).click();
   await expect(page.getByRole('heading', { name: 'Overview' })).toBeVisible();

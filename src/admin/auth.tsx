@@ -6,6 +6,7 @@ import type { Session } from '@supabase/supabase-js';
 import { KeyRound, LogOut, ShieldCheck } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { errorMessage } from '@/lib/api';
+import { copyText } from '@/lib/utils';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
 import { BrandMark } from '@/site/chrome';
 import { Btn, Field, Glass, Notice, PageLoader } from '@/ui';
@@ -78,6 +79,8 @@ function Mfa({ onDone }: { onDone: () => void }) {
   const [factorId, setFactorId] = useState('');
   const [qr, setQr] = useState('');
   const [secret, setSecret] = useState('');
+  const [uri, setUri] = useState('');
+  const [copied, setCopied] = useState(false);
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -101,6 +104,8 @@ function Mfa({ onDone }: { onDone: () => void }) {
       setFactorId(enrolled.data.id);
       setQr(enrolled.data.totp.qr_code);
       setSecret(enrolled.data.totp.secret);
+      // only ever offer a real authenticator link
+      setUri(/^otpauth:\/\/totp\/\S+$/.test(enrolled.data.totp.uri) ? enrolled.data.totp.uri : '');
       setMode('enroll');
     })();
     return () => { cancelled = true; };
@@ -122,13 +127,15 @@ function Mfa({ onDone }: { onDone: () => void }) {
   if (mode === 'loading') return <Shell title="Two-step verification">{error ? <Notice tone="danger">{error}</Notice> : <PageLoader />}</Shell>;
   return (
     <Shell title={mode === 'enroll' ? 'Set up two-step verification' : 'Two-step verification'}
-      subtitle={mode === 'enroll' ? 'Required for all admin accounts. Scan the QR code with Google Authenticator, Authy, 1Password or a similar app.' : 'Enter the current code from your authenticator app.'}>
+      subtitle={mode === 'enroll' ? 'Required for all admin accounts. Use Google Authenticator, Authy, 1Password or a similar app: scan the QR code, or on a phone use the button below.' : 'Enter the current code from your authenticator app.'}>
       <form onSubmit={verify} className="grid gap-4" noValidate>
         {mode === 'enroll' && (
           <div className="text-center">
             <img src={qr} alt="Authenticator QR code" className="mx-auto h-48 w-48 rounded-2xl bg-[#fff] p-2" />
-            <p className="mt-3 text-xs text-muted">Can’t scan? Enter this key manually:</p>
-            <p className="mt-1 break-all rounded-xl bg-black/40 p-2 font-mono text-xs" data-testid="totp-secret">{secret}</p>
+            {uri && <a href={uri} className="btn btn-md btn-primary btn-style-gradient btn-hover-glow mt-4 w-full md:!hidden">Open in my authenticator app</a>}
+            <p className="mt-3 text-xs text-muted">On a phone you cannot scan your own screen: tap the button above, or copy this key and add it in your authenticator app (Add account → Enter a setup key):</p>
+            <p className="mt-1 break-all rounded-xl bg-[color-mix(in_srgb,var(--dm-text)_8%,transparent)] p-2 font-mono text-xs" data-testid="totp-secret">{secret}</p>
+            <Btn size="sm" variant="secondary" className="mt-2" onClick={async () => { setCopied(await copyText(secret)); setTimeout(() => setCopied(false), 2000); }}>{copied ? 'Copied' : 'Copy key'}</Btn>
           </div>
         )}
         <CodeInput value={code} onChange={setCode} />
