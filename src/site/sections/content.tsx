@@ -12,7 +12,7 @@ import { cx } from '@/lib/utils';
 import { Btn, Field, Glass, Notice } from '@/ui';
 import { Turnstile } from '../Turnstile';
 import { ContactList, SiteButton, SiteLink } from '../chrome';
-import { Assemble, DriftingCursors, Sculpture } from '../fx';
+import { DriftingCursors, Sculpture } from '../fx';
 import { SiteIcon } from '../icons';
 import { useSite } from '../SiteContext';
 
@@ -61,7 +61,7 @@ function DevicesVisual() {
 }
 
 export function HeroSection({ id, props, align }: P<'hero'>) {
-  const { site, editing } = useSite();
+  const { site } = useSite();
   const image = safeImage(props.imageUrl);
   const bg = safeImage(props.backgroundImageUrl);
   const hasVisual = props.visual === 'devices' || props.visual === 'orb' || props.visual === 'sculpture' || (props.visual === 'image' && image);
@@ -75,7 +75,7 @@ export function HeroSection({ id, props, align }: P<'hero'>) {
   const text = (
     <div className={cx('min-w-0', align === 'center' && 'mx-auto max-w-4xl text-center')}>
       {props.eyebrow && (
-        <p data-edit={`section:${id}:eyebrow`} className="dm-mono mb-6 flex max-w-full items-center gap-2.5 uppercase">
+        <p data-edit={`section:${id}:eyebrow`} className="dm-mono mb-6 flex w-fit max-w-full items-center gap-2.5 uppercase">
           <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
           <span className={cx('min-w-0', align === 'center' && 'mx-auto')}>{props.eyebrow}</span>
         </p>
@@ -96,10 +96,9 @@ export function HeroSection({ id, props, align }: P<'hero'>) {
       {bg && <div className="absolute inset-0 -z-10 overflow-hidden rounded-[var(--dm-radius-card)]"><img src={bg} alt="" className="h-full w-full object-cover opacity-40" /><div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-[var(--dm-bg)]" /></div>}
       {props.showCursors && <DriftingCursors />}
       <div className={cx('grid w-full items-center gap-10 py-8', split ? 'lg:grid-cols-[1.25fr_1fr]' : 'grid-cols-1')}>
-        <Assemble disabled={editing} seed={1}>{text}</Assemble>
+        {text}
         {hasVisual && (
-          <motion.div initial={editing ? false : { opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
-            className={cx('min-w-0', !split && 'mx-auto w-full max-w-3xl')} data-edit={`section:${id}:visual`}>
+          <div className={cx('min-w-0', !split && 'mx-auto w-full max-w-3xl')} data-edit={`section:${id}:visual`}>
             {props.visual === 'sculpture' && <Sculpture />}
             {props.visual === 'devices' && <DevicesVisual />}
             {props.visual === 'orb' && (
@@ -109,7 +108,7 @@ export function HeroSection({ id, props, align }: P<'hero'>) {
               </div>
             )}
             {props.visual === 'image' && image && <Glass className="overflow-hidden p-2"><img src={image} alt={props.imageAlt} className="w-full rounded-[calc(var(--dm-radius-card)-8px)] object-cover" /></Glass>}
-          </motion.div>
+          </div>
         )}
       </div>
       {props.chips.length > 0 && (

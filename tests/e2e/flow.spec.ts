@@ -34,12 +34,16 @@ test.beforeAll(async () => {
   await service.from('promotions').insert({ name: 'E2E ten percent', kind: 'promo_code', code: 'E2E10', discount_type: 'percent', percent_bps: 1000 });
 });
 
+/** The arrow builder is a visual effect: turn it off where a test only needs instant, stable content. */
+const noBuilder = (page: Page) => page.addInitScript(() => localStorage.setItem('devmart-build', 'off'));
+
 async function noOverflow(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(1);
 }
 
 test('every public page renders on a phone without horizontal scrolling', async ({ browser }) => {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await noBuilder(page);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   for (const path of Object.values(PAGE_PATHS)) {
@@ -54,6 +58,45 @@ test('every public page renders on a phone without horizontal scrolling', async 
   await expect(page).toHaveURL(/\/pricing$/);
   expect(errors).toEqual([]);
   await page.close();
+});
+
+test('the arrow builder draws every part with its own cursor and leaves a fully visible page', async ({ browser }) => {
+  const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto('/');
+  // parts are masked before their turn, each with its own overlay (box + cursor + size tag)
+  await expect.poll(() => page.locator('[data-build]').count()).toBeGreaterThan(10);
+  await expect(page.locator('.dm-bj-cur').first()).toBeAttached();
+  await expect(page.locator('.dm-bj-tag').first()).toBeAttached();
+  const kinds = await page.locator('[data-kind]').evaluateAll((els) => [...new Set(els.map((e) => (e as HTMLElement).dataset.kind))]);
+  for (const kind of ['nav', 'heading', 'button', 'text', 'image', 'stat']) expect(kinds, kind).toContain(kind);
+  // the whole first screen ends up built, and all overlays are cleaned up
+  await expect.poll(() => page.locator('main section').first().locator('[data-build="pending"], [data-build="drag"]').count(), { timeout: 20_000 }).toBe(0);
+  await expect(page.locator('.dm-bj')).toHaveCount(0, { timeout: 10_000 });
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.locator('.dm-pill')).toContainText('layers');
+
+  // scrolling builds more parts, cards included
+  const before = await page.locator('[data-build="done"]').count();
+  await page.evaluate(() => scrollTo(0, 1500));
+  await expect.poll(() => page.locator('[data-kind="card"][data-build="done"]').count(), { timeout: 20_000 }).toBeGreaterThan(0);
+  expect(await page.locator('[data-build="done"]').count()).toBeGreaterThan(before);
+
+  // × closes the builder: everything is shown at once and the page is untouched
+  await page.getByRole('button', { name: 'Close builder and show the page' }).click();
+  await expect(page.locator('[data-build]')).toHaveCount(0);
+  await expect(page.locator('.dm-pill')).toHaveCount(0);
+  await noOverflow(page);
+  expect(errors).toEqual([]);
+  await page.close();
+
+  // visitors who prefer reduced motion never see the effect
+  const calm = await browser.newPage({ reducedMotion: 'reduce' });
+  await calm.goto('/');
+  await expect(calm.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(calm.locator('[data-build]')).toHaveCount(0);
+  await calm.close();
 });
 
 test('the database refuses anonymous access to private data', async ({ request }) => {

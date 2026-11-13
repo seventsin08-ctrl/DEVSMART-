@@ -1,8 +1,4 @@
-// Decorative effects: the "assemble" entrance (selection box + size tag + cursors),
-// drifting cursors and the CSS 3D sculpture. All are aria-hidden and disabled for reduced motion.
-import { useInView } from 'motion/react';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { cx } from '@/lib/utils';
+// Decorative effects: drifting cursors and the CSS 3D sculpture (the cursor-built entrance lives in builder.tsx). All are aria-hidden and disabled for reduced motion.
 
 const CURSOR_COLORS = ['#ffd24a', '#ff7a90', '#7dd3fc', '#a78bfa', '#5eead4', '#fb923c'];
 
@@ -11,25 +7,6 @@ export function Cursor({ color, className, style }: { color: string; className?:
     <svg viewBox="0 0 24 24" className={className} style={style} aria-hidden>
       <path d="M4 3l15 7.500-6.200 2.100L10.500 19z" fill={color} stroke="#0b0d12" strokeWidth="1.2" strokeLinejoin="round" />
     </svg>
-  );
-}
-
-/** Wraps content; when it scrolls into view a selection box "places" it, then it fades in. */
-export function Assemble({ children, disabled, seed = 0 }: { children: ReactNode; disabled?: boolean; seed?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
-  const [size, setSize] = useState('');
-  useEffect(() => {
-    if (inView && ref.current) setSize(`${Math.round(ref.current.offsetWidth)} × ${Math.round(ref.current.offsetHeight)}`);
-  }, [inView]);
-  if (disabled) return <>{children}</>;
-  return (
-    <div ref={ref} className={cx('dm-asm', inView && 'in')}>
-      <div className="dm-asm-box" aria-hidden><i /><i /><i /><i /><b>{size}</b></div>
-      <Cursor className="dm-cursor" color={CURSOR_COLORS[seed % CURSOR_COLORS.length]} />
-      <Cursor className="dm-cursor" color={CURSOR_COLORS[(seed + 3) % CURSOR_COLORS.length]} />
-      <div className="dm-asm-content">{children}</div>
-    </div>
   );
 }
 

@@ -132,7 +132,7 @@ export const STYLE_FIELDS: F[] = [
   { key: 'paddingY', label: 'Vertical spacing', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'sm', label: 'Small' }, { value: 'md', label: 'Medium' }, { value: 'lg', label: 'Large' }, { value: 'xl', label: 'Extra large' }] },
   { key: 'width', label: 'Content width', type: 'select', options: [{ value: 'narrow', label: 'Narrow' }, { value: 'normal', label: 'Normal' }, { value: 'wide', label: 'Wide' }] },
   { key: 'background', label: 'Section background', type: 'select', options: [{ value: 'none', label: 'Transparent' }, { value: 'glass', label: 'Glass panel' }, { value: 'tint', label: 'Colour tint' }, { value: 'glow', label: 'Glow' }] },
-  { key: 'animation', label: 'Entrance animation', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'fade', label: 'Fade' }, { value: 'rise', label: 'Rise' }, { value: 'scale', label: 'Scale' }, { value: 'blur', label: 'Blur in' }, { value: 'assemble', label: 'Assemble (design-tool effect)' }] },
+  { key: 'animation', label: 'Entrance animation', type: 'select', options: [{ value: 'none', label: 'None' }, { value: 'fade', label: 'Fade' }, { value: 'rise', label: 'Rise' }, { value: 'scale', label: 'Scale' }, { value: 'blur', label: 'Blur in' }, { value: 'assemble', label: 'Arrow builder (cursors draw each part)' }] },
   { key: 'accent', label: 'Accent colour for this section', type: 'color', allowEmptyColor: true, hint: 'Leave empty to use the brand accent.' },
 ];
 
@@ -140,6 +140,11 @@ const fontOptions = Object.entries(FONT_OPTIONS).map(([value, f]) => ({ value, l
 const group = (key: string, label: string, fields: F[]): F => ({ key, label, type: 'group', fields });
 
 export const THEME_FIELDS: F[] = [
+  group('motion', 'Arrow builder animation', [
+    { key: 'build', label: 'Build every part with cursors', type: 'bool', hint: 'Cursors fly in and drag out the box of each heading, button, card, image and stat as visitors scroll. Switched off automatically for visitors who prefer reduced motion.' },
+    { key: 'speed', label: 'Build speed', type: 'range', min: 0.5, max: 3, step: 0.25, unit: '×' },
+    { key: 'pill', label: 'Show the builder bar', type: 'bool', hint: 'Agents and layers counter with Replay, Tour and speed controls.' },
+  ]),
   { key: 'mode', label: 'Appearance', type: 'select', options: [{ value: 'light', label: 'Light (dark text on light backgrounds)' }, { value: 'dark', label: 'Dark (light text on dark backgrounds)' }], hint: 'Tells buttons, panels and status colours which way to contrast. Use a preset below to switch everything at once.' },
   group('colors', 'Colours', [
     { key: 'accent', label: 'Accent (buttons, links, highlights)', type: 'color' },

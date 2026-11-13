@@ -293,6 +293,7 @@ const THEME_BASE = {
   fonts: { heading: 'system', body: 'system' },
   scale: { base: 16, heading: 1 },
   radius: { card: 18, button: 10 },
+  motion: { build: true, speed: 1.5, pill: true },
 } as const;
 
 /** Default look: white background, dark text, high contrast. */

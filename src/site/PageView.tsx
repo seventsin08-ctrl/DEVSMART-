@@ -6,7 +6,7 @@ import type { PageSlug, Section, SectionStyle, SectionType } from '@shared/site/
 import { cx } from '@/lib/utils';
 import { Spinner } from '@/ui';
 import { Footer, Nav } from './chrome';
-import { Assemble } from './fx';
+import { BuildEngine } from './builder';
 import { useSite } from './SiteContext';
 import {
   BenefitsSection, ContactSection, CtaSection, FaqSection, HeroSection, ImageTextSection, PageHeaderSection,
@@ -36,7 +36,7 @@ const ANIM = {
   assemble: null,
 } as const;
 
-function SectionShell({ section, children, index }: { section: Section; children: ReactNode; index: number }) {
+function SectionShell({ section, children }: { section: Section; children: ReactNode }) {
   const { editing } = useSite();
   const { style } = section;
   const anim = section.type === 'hero' ? null : ANIM[style.animation];
@@ -47,12 +47,11 @@ function SectionShell({ section, children, index }: { section: Section; children
       style.background === 'tint' && 'rounded-[var(--dm-radius-card)] bg-[color-mix(in_srgb,var(--dm-accent)_8%,transparent)] px-5 py-10 sm:px-10 sm:py-14',
       style.background === 'glow' && 'relative')}>
       {style.background === 'glow' && <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-10 -z-10 mx-auto h-72 max-w-3xl rounded-full bg-[color-mix(in_srgb,var(--dm-accent)_22%,transparent)] blur-[90px]" />}
-      {style.animation === 'assemble' && section.type !== 'hero' && !['orderForm', 'trackOrder', 'payment'].includes(section.type)
-        ? <Assemble disabled={editing} seed={index}>{children}</Assemble> : children}
+      {children}
     </div>
   );
   return (
-    <section id={section.id} data-edit={`section:${section.id}`} data-section-type={section.type} style={accent}
+    <section id={section.id} data-edit={`section:${section.id}`} data-section-type={section.type} data-anim={style.animation} style={accent}
       className={cx('relative px-4 sm:px-6 lg:px-8', PAD[style.paddingY], !section.visible && 'dm-hidden-section')}>
       {anim ? (
         <motion.div key={style.animation} variants={anim} initial={editing ? false : 'hidden'} whileInView="show" viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}>
@@ -67,10 +66,10 @@ export function SectionList({ sections }: { sections: Section[] }) {
   const { editing } = useSite();
   return (
     <>
-      {sections.filter((s) => s.visible || editing).map((s, index) => {
+      {sections.filter((s) => s.visible || editing).map((s) => {
         const Component = COMPONENTS[s.type];
         return (
-          <SectionShell key={s.id} section={s} index={index}>
+          <SectionShell key={s.id} section={s}>
             <Suspense fallback={<Spinner />}><Component id={s.id} props={s.props} align={s.style.align} /></Suspense>
           </SectionShell>
         );
@@ -92,6 +91,7 @@ export function PageView({ slug }: { slug: PageSlug }) {
         <main id="main" className="flex-1"><SectionList sections={page.sections} /></main>
         <Footer />
       </div>
+      {!editing && <BuildEngine key={slug} motion={site.theme.motion} />}
     </div>
   );
 }

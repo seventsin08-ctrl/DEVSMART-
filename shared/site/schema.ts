@@ -63,6 +63,7 @@ const iconName = z.enum(ICON_NAMES);
 // ───────────────────────── theme ─────────────────────────
 export const themeSchema = z.object({
   mode: z.enum(['light', 'dark']),
+  motion: z.object({ build: z.boolean(), speed: z.number().min(0.5).max(3), pill: z.boolean() }),
   colors: z.object({
     background: hexColor,
     surface: hexColor,

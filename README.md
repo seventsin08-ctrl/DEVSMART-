@@ -122,9 +122,9 @@ npm run stack:down              # stop
 ```bash
 npm run lint         # ESLint
 npm run typecheck    # TypeScript
-npm test             # 24 unit tests: pricing, discounts, money, validation, URL safety, PDF, undo/redo
+npm test             # 28 unit tests: pricing, discounts, money, validation, URL safety, PDF, undo/redo, builder maths
 npm run test:db      # 55 SQL checks: RLS, payment rules, publishing, rate limits (needs the local stack)
-npm run test:e2e     # 6 browser tests against the local stack (needs start-all.sh)
+npm run test:e2e     # 7 browser tests against the local stack (needs start-all.sh)
 npm run build        # production build
 ```
 
@@ -151,6 +151,15 @@ The whole site (theme, brand, navigation, footer, buttons, form texts and every 
 Content is plain text, numbers, enumerated options and sanitised URLs — there is no HTML, CSS or script input anywhere, and URLs such as `javascript:` are rejected on save and again at render time.
 
 Service and add-on **prices** in the studio's Pricing tab are business data: they save immediately and are not part of draft/publish.
+
+### Arrow builder (cursor-drawn page)
+Every part of the public site is created by its own cursor: a cursor flies in, grabs the top-left corner, and drags out a selection box with handles and a live size tag, and the real element is revealed inside the growing box. This applies to the navigation bar, headings, text, buttons, cards, images, stats and the footer. A bar at the bottom shows how many cursors ("agents") are working and how many "layers" are built, with **Replay**, **Tour** (auto-scrolls the page so it builds itself), a speed switch and **×** (shows everything immediately).
+
+- Edit it in **Branding Studio → Theme → Arrow builder animation**: on/off, speed (0.5–3×), and whether the bar is shown. Per section, **Layout & style → Entrance animation** can switch a section to a classic animation instead.
+- It is presentation only: all content is normal page content from the start (screen readers and search engines see it), and it is switched off automatically for visitors who prefer reduced motion and inside the studio preview.
+- Forms stay instantly usable: inside the order, payment and tracking sections only the outer cards are drawn, never the form fields.
+- QA kill switch: `localStorage.setItem('devmart-build', 'off')` disables it (the end-to-end tests use this for the page-layout loop).
+- `dev/tools/screencast.mjs <page> <out.mp4> --tour` records a real-time video of the page building itself.
 
 ### Security summary
 - RLS on every table. Anonymous users can read only the active catalogue, published portfolio, active payment methods and advertised promotions.
