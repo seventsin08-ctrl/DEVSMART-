@@ -1,5 +1,4 @@
 // POST /api/contact — public contact form.
-import type { Config } from '@netlify/functions';
 import { contactSchema } from '../../shared/schemas';
 import { adminNotifyEmail, sendEmail } from './_lib/email';
 import { checkSpam, rateLimit } from './_lib/guard';
@@ -29,5 +28,3 @@ export default endpoint(['POST'], async (req, context) => {
   }
   return json({ ok: true }, 201);
 });
-
-export const config: Config = { path: '/api/contact' };

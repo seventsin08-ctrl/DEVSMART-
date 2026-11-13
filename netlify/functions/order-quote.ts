@@ -1,5 +1,4 @@
 // POST /api/order-quote — server-side price & discount preview for the order form.
-import type { Config } from '@netlify/functions';
 import { PROMO_PROBLEM_MESSAGES } from '../../shared/pricing';
 import { quoteRequestSchema } from '../../shared/schemas';
 import { rateLimit } from './_lib/guard';
@@ -25,5 +24,3 @@ export default endpoint(['POST'], async (req, context) => {
       : PROMO_PROBLEM_MESSAGES[priced.codeProblem],
   });
 });
-
-export const config: Config = { path: '/api/order-quote' };

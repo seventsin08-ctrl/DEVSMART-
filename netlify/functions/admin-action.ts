@@ -1,6 +1,5 @@
 // POST /api/admin-action — privileged operations for the admin dashboard.
 // Every call re-verifies the caller: valid session + allowlisted + MFA (aal2).
-import type { Config } from '@netlify/functions';
 import { formatPHP, parsePesos } from '../../shared/money';
 import { adminActionSchema } from '../../shared/schemas';
 import { emailConfigured, sendEmail } from './_lib/email';
@@ -114,5 +113,3 @@ export default endpoint(['POST'], async (req) => {
     }
   }
 });
-
-export const config: Config = { path: '/api/admin-action' };

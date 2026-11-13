@@ -5,12 +5,20 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # The Supabase URL and anon key are public by design (they ship inside the website). Without this,
+  # Netlify's secret scanner can stop the deploy when it finds them in the built files.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY,VITE_TURNSTILE_SITE_KEY,SUPABASE_URL,SITE_URL"
 
 [functions]
   node_bundler = "esbuild"
 
-# API routes are declared by each function (export const config = { path }).
-# Everything else is the single-page app.
+# Order matters (first match wins): /api/<name> runs the function of the same name,
+# everything else is the single-page app.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

@@ -16,7 +16,8 @@
     "test:e2e": "playwright test --trace off",
     "stack:up": "bash dev/stack/up.sh",
     "stack:down": "bash dev/stack/down.sh",
-    "create-owner": "tsx scripts/create-owner.ts"
+    "create-owner": "tsx scripts/create-owner.ts",
+    "build:sql": "node scripts/build-setup-sql.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.5",

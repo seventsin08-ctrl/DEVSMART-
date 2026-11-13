@@ -1,4 +1,4 @@
-// Local runner for the Netlify functions (same code, same /api/* paths) so the app can be
+// Local runner for the Netlify functions (same code; /api/<file name> like the Netlify redirect) so the app can be
 // developed and tested without the Netlify CLI. Production uses Netlify's own runtime.
 import http from 'node:http';
 import { readdirSync, existsSync, readFileSync } from 'node:fs';
@@ -20,7 +20,7 @@ const routes = new Map<string, Fn>();
 const dir = path.join(root, 'netlify/functions');
 for (const file of readdirSync(dir).filter((f) => f.endsWith('.ts'))) {
   const mod = await import(pathToFileURL(path.join(dir, file)).href);
-  if (mod.config?.path && typeof mod.default === 'function') routes.set(mod.config.path, mod.default);
+  if (typeof mod.default === 'function') routes.set(`/api/${file.replace(/\.ts$/, '')}`, mod.default);
 }
 
 const port = Number(process.env.API_PORT ?? 8788);

@@ -1,7 +1,6 @@
 // POST /api/payment-submit — a customer uploads a proof of payment for manual verification.
 // Nothing here can mark a payment as verified.
 import crypto from 'node:crypto';
-import type { Config } from '@netlify/functions';
 import { PROOF_MAX_BYTES } from '../../shared/constants';
 import { parsePesos } from '../../shared/money';
 import { paymentSubmitSchema, sniffMime } from '../../shared/schemas';
@@ -102,5 +101,3 @@ export default endpoint(['POST'], async (req, context) => {
 
   return json({ id: submission.id, status: submission.status, acknowledgment_url: acknowledgmentUrl }, 201);
 });
-
-export const config: Config = { path: '/api/payment-submit' };

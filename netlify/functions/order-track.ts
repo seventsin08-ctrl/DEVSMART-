@@ -2,7 +2,6 @@
 //   view          : token → order status, milestones, payments, documents
 //   document      : token + document id → short-lived signed download URL
 //   request_link  : reference + email → e-mails a fresh expiring link (response never reveals a match)
-import type { Config } from '@netlify/functions';
 import { ORDER_STATUS_DESCRIPTIONS, ORDER_STATUS_LABELS, PAYMENT_STATUS_LABELS, type PaymentStatus } from '../../shared/constants';
 import { trackRequestSchema } from '../../shared/schemas';
 import { emailConfigured, sendEmail } from './_lib/email';
@@ -117,5 +116,3 @@ export default endpoint(['POST'], async (req, context) => {
     link_expires_at: expiresAt,
   });
 });
-
-export const config: Config = { path: '/api/order-track' };

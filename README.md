@@ -42,18 +42,14 @@ dev/stack/             local Supabase-compatible stack (Docker) for development 
 
 ## Setup
 
+**Not technical? Follow [docs/GO-LIVE.md](docs/GO-LIVE.md)**: a click-by-click guide that needs no terminal. The details below are for developers.
+
 ### 1. Create the Supabase project
 
 1. Create a project at <https://supabase.com> (region: Singapore is closest to the Philippines).
-2. Run the migrations **in order**. Either paste each file of `supabase/migrations/` into **SQL Editor → New query → Run**, or use the CLI:
-   ```bash
-   npx supabase link --project-ref YOUR-PROJECT-REF
-   npx supabase db push
-   ```
-   This creates all tables, security policies, the three storage buckets (`media` public, `payment-proofs` and `documents` private) and the six starting services.
+2. Create the whole database with **one paste**: open **SQL Editor → New query**, paste the contents of [`supabase/setup.sql`](supabase/setup.sql) and run it once on the empty project. (It is the four files in `supabase/migrations/` combined: tables, security policies, storage buckets and the six starting services. Regenerate it with `npm run build:sql`; a unit test fails if it is out of date.) Or use the CLI: `npx supabase link --project-ref YOUR-PROJECT-REF && npx supabase db push`.
 3. **Authentication → Sign In / Providers**: turn **off** "Allow new users to sign up". There is no public admin registration.
 4. **Authentication → Multi-Factor**: make sure **TOTP** is enabled (it is by default).
-5. Optional: **Database → Publications → supabase_realtime**: the migration already adds `notifications`; this gives live notification updates (the dashboard also polls every 45 seconds).
 
 ### 2. Create the owner account
 
@@ -63,13 +59,15 @@ npm install
 npm run create-owner -- you@example.com 'a-long-unique-password'
 ```
 
+(No terminal? Add the user in Supabase → Authentication → Users with *Auto Confirm User* ticked, then run `insert into public.admin_roles (email, role) values ('you@example.com', 'owner');` in the SQL editor. Either order works.)
+
 This adds your email to the admin allowlist and creates a confirmed user. On first sign-in at `/admin` you are required to scan a QR code with an authenticator app (Google Authenticator, Authy, 1Password…). Without that second factor the database refuses all admin access.
 
 Prefer doing it by hand? Run `insert into admin_roles (email, role) values ('you@example.com', 'owner');` in the SQL editor, then add the user under **Authentication → Users → Add user** (tick *Auto Confirm*).
 
 ### 3. Deploy to Netlify
 
-1. **Add new site → Import an existing project** and pick this repository. Build settings are read from `netlify.toml`.
+1. **Add new site → Import an existing project** and pick this repository. Build settings are read from `netlify.toml`, which also routes `/api/<name>` to the function of the same name (before the single-page-app fallback) and tells Netlify's secret scanner that the public Supabase values are meant to be in the built files.
 2. **Site configuration → Environment variables** — add:
 
 | Variable | Where it is used | Notes |
@@ -122,7 +120,7 @@ npm run stack:down              # stop
 ```bash
 npm run lint         # ESLint
 npm run typecheck    # TypeScript
-npm test             # 28 unit tests: pricing, discounts, money, validation, URL safety, PDF, undo/redo, builder maths
+npm test             # 30 unit tests: pricing, discounts, money, validation, URL safety, PDF, undo/redo, builder maths
 npm run test:db      # 55 SQL checks: RLS, payment rules, publishing, rate limits (needs the local stack)
 npm run test:e2e     # 7 browser tests against the local stack (needs start-all.sh)
 npm run build        # production build

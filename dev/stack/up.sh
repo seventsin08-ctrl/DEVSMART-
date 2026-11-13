@@ -71,7 +71,11 @@ done
 
 echo "applying DevMart migrations…"
 PSQL_PG="psql -h 127.0.0.1 -p $DBPORT -U postgres -d postgres -v ON_ERROR_STOP=1 -q"
-for f in ../../supabase/migrations/*.sql; do echo "  $(basename "$f")"; $PSQL_PG -f "$f" >/dev/null; done
+if [ -n "${SETUP_FILE:-}" ]; then
+  echo "  $(basename "$SETUP_FILE") (single file)"; $PSQL_PG -f "$SETUP_FILE" >/dev/null
+else
+  for f in ../../supabase/migrations/*.sql; do echo "  $(basename "$f")"; $PSQL_PG -f "$f" >/dev/null; done
+fi
 $PSQL -c "notify pgrst, 'reload schema'" >/dev/null
 
 pkill -f "dev/stack/gateway.mjs" 2>/dev/null || true

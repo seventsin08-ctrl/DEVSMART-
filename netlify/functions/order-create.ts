@@ -1,6 +1,5 @@
 // POST /api/order-create — validates, prices on the server, stores the order atomically,
 // issues a private tracking link and generates the order summary PDF.
-import type { Config } from '@netlify/functions';
 import { formatPHP } from '../../shared/money';
 import { orderRequestSchema } from '../../shared/schemas';
 import { adminNotifyEmail, sendEmail } from './_lib/email';
@@ -110,5 +109,3 @@ export default endpoint(['POST'], async (req, context) => {
     },
   }, 201);
 });
-
-export const config: Config = { path: '/api/order-create' };
