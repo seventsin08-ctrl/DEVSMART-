@@ -41,9 +41,8 @@ You need three free accounts: **GitHub** (your code is already there), **Supabas
    | `SUPABASE_SERVICE_ROLE_KEY` | service_role / secret key | tick **Contains secret values** |
    | `IP_HASH_SALT` | any long random text (30+ characters) | tick **Contains secret values** |
 
-3. Press **Deploy**. After a minute or two you get an address like `https://something.netlify.app`.
-4. Add one more variable, `SITE_URL`, set to that address (no slash at the end). Then **Deploys → Trigger deploy → Deploy site**, so tracking links use your address.
-   Optional: *Site configuration → Change site name* gives you a nicer address.
+3. Press **Deploy**. After a minute or two you get an address like `https://something.netlify.app`. (The *Project name* at the top of the setup screen decides that address.)
+4. Optional: `SITE_URL`. The site already builds tracking links from the address people visit, so you can skip this. Set it (for example `https://your-domain.com`, no slash at the end) only if you want links to always use one specific address, then redeploy.
 
 ---
 
