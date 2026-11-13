@@ -209,7 +209,7 @@ export function PortfolioSection({ id, props, align }: P<'portfolio'>) {
         {open && (
           <motion.div className="fixed inset-0 z-[90] grid place-items-end bg-black/70 backdrop-blur-sm sm:place-items-center sm:p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setOpen(null)}>
             <motion.div role="dialog" aria-modal="true" aria-label={open.title} onClick={(e) => e.stopPropagation()} initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 30, opacity: 0 }}
-              className="glass scroll-thin max-h-[88dvh] w-full max-w-2xl overflow-y-auto !bg-[#0b0e14]/95 p-6 text-left">
+              className="glass scroll-thin max-h-[88dvh] w-full max-w-2xl overflow-y-auto !bg-surface/95 p-6 text-left">
               <p className="text-xs font-medium uppercase tracking-wider text-accent">{open.category}{open.is_concept && ' · Concept project'}</p>
               <h3 className="mt-1 text-2xl font-semibold">{open.title}</h3>
               {safeImage(open.image_url) && <img src={safeImage(open.image_url)} alt="" className="mt-4 w-full rounded-2xl" />}

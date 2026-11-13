@@ -127,7 +127,7 @@ export function Modal({ open, onClose, title, children, footer, wide, side }: { 
         <motion.div className={cx('fixed inset-0 z-[100] flex bg-black/60 backdrop-blur-sm', side ? 'justify-end' : 'items-end justify-center p-0 sm:items-center sm:p-6')}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
           <motion.div ref={ref} tabIndex={-1} role="dialog" aria-modal="true" aria-label={title}
-            className={cx('glass flex max-h-[100dvh] w-full flex-col outline-none !bg-[#0b0e14]/95',
+            className={cx('glass flex max-h-[100dvh] w-full flex-col outline-none !bg-surface/95',
               side ? 'h-full max-w-xl !rounded-none sm:!rounded-l-3xl' : cx('max-h-[92dvh] !rounded-b-none sm:!rounded-b-[var(--dm-radius-card)]', wide ? 'sm:max-w-3xl' : 'sm:max-w-lg'))}
             initial={side ? { x: 40, opacity: 0 } : { y: 24, opacity: 0, scale: 0.98 }} animate={{ x: 0, y: 0, opacity: 1, scale: 1 }}
             exit={side ? { x: 40, opacity: 0 } : { y: 24, opacity: 0 }} transition={{ type: 'spring', damping: 30, stiffness: 340 }}>
@@ -164,7 +164,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <AnimatePresence>
             {toasts.map((t) => (
               <motion.div key={t.id} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }}
-                className={cx('glass pointer-events-auto flex max-w-md items-center gap-2 !rounded-full !bg-[#10141c]/95 px-4 py-2.5 text-sm', t.tone === 'danger' && '!border-rose-400/40')}>
+                className={cx('glass pointer-events-auto flex max-w-md items-center gap-2 !rounded-full !bg-surface/95 px-4 py-2.5 text-sm', t.tone === 'danger' && '!border-rose-400/40')}>
                 {t.tone === 'danger' ? <AlertCircle className="h-4 w-4 shrink-0 text-rose-300" /> : <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" />}
                 <span>{t.text}</span>
               </motion.div>
@@ -205,7 +205,7 @@ export function Switch({ checked, onChange, label, disabled }: { checked: boolea
   return (
     <button type="button" role="switch" aria-checked={checked} aria-label={label} disabled={disabled} onClick={() => onChange(!checked)}
       className={cx('relative h-6 w-11 shrink-0 rounded-full border border-white/15 transition-colors disabled:opacity-50', checked ? 'bg-accent' : 'bg-white/10')}>
-      <span className={cx('absolute top-0.5 h-[18px] w-[18px] rounded-full bg-white shadow transition-all', checked ? 'left-[22px]' : 'left-0.5')} />
+      <span className={cx('absolute top-0.5 h-[18px] w-[18px] rounded-full bg-[#fff] shadow transition-all', checked ? 'left-[22px]' : 'left-0.5')} />
     </button>
   );
 }

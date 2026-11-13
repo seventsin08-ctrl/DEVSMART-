@@ -234,7 +234,7 @@ export function PaymentsPage() {
       { key: 'name', label: 'Method', render: (r) => <span className="font-medium">{r.name}</span> },
       { key: 'account_holder', label: 'Account name', hideOnMobile: true, render: (r) => r.account_holder || <span className="text-amber-300">Not set</span> },
       { key: 'account_number', label: 'Account number', render: (r) => (r.account_number ? <span className="font-mono text-xs">{r.account_number}</span> : <span className="text-amber-300">Not set</span>) },
-      { key: 'qr', label: 'QR', hideOnMobile: true, render: (r) => (r.qr_image_url ? <img src={r.qr_image_url} alt="" className="h-9 w-9 rounded bg-white object-contain" /> : '—') },
+      { key: 'qr', label: 'QR', hideOnMobile: true, render: (r) => (r.qr_image_url ? <img src={r.qr_image_url} alt="" className="h-9 w-9 rounded bg-[#fff] object-contain" /> : '—') },
       { key: 'is_active', label: 'Status', render: (r) => (r.is_active ? <Badge tone="success">Available</Badge> : <Badge tone="warn">Hidden</Badge>) },
     ],
     fields: [

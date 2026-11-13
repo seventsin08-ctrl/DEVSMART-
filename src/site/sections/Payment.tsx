@@ -103,7 +103,7 @@ export function PaymentSection() {
                   className={cx('glass-soft flex items-center gap-3 p-4 text-left', m.id === methodId ? '!border-accent !bg-accent/15' : 'hover:!border-white/30')}>
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-sm font-bold uppercase text-accent">{m.name.slice(0, 2)}</span>
                   <span className="min-w-0 flex-1 font-medium">{m.name}</span>
-                  <span className={cx('grid h-5 w-5 place-items-center rounded-full border', m.id === methodId ? 'border-accent bg-accent' : 'border-white/30')}>{m.id === methodId && <Check className="h-3 w-3 text-white" aria-hidden />}</span>
+                  <span className={cx('grid h-5 w-5 place-items-center rounded-full border', m.id === methodId ? 'border-accent bg-accent' : 'border-white/30')}>{m.id === methodId && <Check className="h-3 w-3 text-[#fff]" aria-hidden />}</span>
                 </button>
               ))}
             </div>
@@ -124,7 +124,7 @@ export function PaymentSection() {
               {method.instructions && <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-ink/85">{method.instructions}</p>}
               {qr ? (
                 <div className="mt-4 text-center">
-                  <img src={qr} alt={`${method.name} QR code`} className="mx-auto w-full max-w-[240px] rounded-2xl bg-white p-2" />
+                  <img src={qr} alt={`${method.name} QR code`} className="mx-auto w-full max-w-[240px] rounded-2xl bg-[#fff] p-2" />
                   <a href={qr} download target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-secondary mt-3"><Download className="h-4 w-4" aria-hidden />View / download QR code</a>
                 </div>
               ) : <p className="mt-4 flex items-center gap-2 text-xs text-muted"><QrCode className="h-4 w-4" aria-hidden />No QR code for this method — use the account details above.</p>}

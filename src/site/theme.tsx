@@ -4,6 +4,7 @@ import { FONT_OPTIONS, safeImage, type SiteDoc, type Theme } from '@shared/site/
 /** Maps the validated theme to CSS custom properties. Only numbers, hex colours and allowlisted font stacks get through. */
 export function themeVars(theme: Theme): CSSProperties {
   return {
+    '--dm-overlay': theme.mode === 'light' ? theme.colors.text : '#ffffff',
     '--dm-bg': theme.colors.background,
     '--dm-surface': theme.colors.surface,
     '--dm-text': theme.colors.text,
@@ -35,6 +36,8 @@ export function useDocumentTheme(site: SiteDoc, pageTitle?: string): void {
     const root = document.documentElement;
     for (const [k, v] of Object.entries(themeVars(theme))) root.style.setProperty(k, String(v));
     root.style.fontSize = `${theme.scale.base}px`;
+    root.dataset.dmMode = theme.mode;
+    root.style.colorScheme = theme.mode;
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.colors.background);
   }, [theme]);
 

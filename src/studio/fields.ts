@@ -140,6 +140,7 @@ const fontOptions = Object.entries(FONT_OPTIONS).map(([value, f]) => ({ value, l
 const group = (key: string, label: string, fields: F[]): F => ({ key, label, type: 'group', fields });
 
 export const THEME_FIELDS: F[] = [
+  { key: 'mode', label: 'Appearance', type: 'select', options: [{ value: 'light', label: 'Light (dark text on light backgrounds)' }, { value: 'dark', label: 'Dark (light text on dark backgrounds)' }], hint: 'Tells buttons, panels and status colours which way to contrast. Use a preset below to switch everything at once.' },
   group('colors', 'Colours', [
     { key: 'accent', label: 'Accent (buttons, links, highlights)', type: 'color' },
     { key: 'accent2', label: 'Secondary light', type: 'color' },

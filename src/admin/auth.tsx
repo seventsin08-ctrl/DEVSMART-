@@ -126,7 +126,7 @@ function Mfa({ onDone }: { onDone: () => void }) {
       <form onSubmit={verify} className="grid gap-4" noValidate>
         {mode === 'enroll' && (
           <div className="text-center">
-            <img src={qr} alt="Authenticator QR code" className="mx-auto h-48 w-48 rounded-2xl bg-white p-2" />
+            <img src={qr} alt="Authenticator QR code" className="mx-auto h-48 w-48 rounded-2xl bg-[#fff] p-2" />
             <p className="mt-3 text-xs text-muted">Can’t scan? Enter this key manually:</p>
             <p className="mt-1 break-all rounded-xl bg-black/40 p-2 font-mono text-xs" data-testid="totp-secret">{secret}</p>
           </div>

@@ -48,7 +48,7 @@ function Stepper({ labels, step }: { labels: string[]; step: number }) {
       {labels.map((label, i) => (
         <li key={i} className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-2" aria-current={i === step ? 'step' : undefined}>
           <span className={cx('grid h-8 w-8 shrink-0 place-items-center rounded-full border text-sm font-semibold transition-colors',
-            i < step ? 'border-accent bg-accent text-white' : i === step ? 'border-accent bg-accent/20 text-ink' : 'border-white/15 bg-white/5 text-muted')}>
+            i < step ? 'border-accent bg-accent text-[#fff]' : i === step ? 'border-accent bg-accent/20 text-ink' : 'border-white/15 bg-white/5 text-muted')}>
             {i < step ? <Check className="h-4 w-4" aria-hidden /> : i + 1}
           </span>
           <span className={cx('hidden truncate text-sm md:block', i === step ? 'font-medium text-ink' : 'text-muted')}>{label}</span>
@@ -182,7 +182,7 @@ export function OrderFormSection() {
                             <span className="mt-0.5 block text-sm text-muted">{s.short_description}</span>
                             <span className="mt-2 block text-sm"><span className="text-muted">Starts at </span><span className="font-semibold">{formatPHP(s.starting_price_centavos)}</span>{deliveryLabel(s.delivery_days_min, s.delivery_days_max) && <span className="text-muted"> · {deliveryLabel(s.delivery_days_min, s.delivery_days_max)}</span>}</span>
                           </span>
-                          <span className={cx('mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full border', active ? 'border-accent bg-accent' : 'border-white/30')}>{active && <Check className="h-3 w-3 text-white" aria-hidden />}</span>
+                          <span className={cx('mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full border', active ? 'border-accent bg-accent' : 'border-white/30')}>{active && <Check className="h-3 w-3 text-[#fff]" aria-hidden />}</span>
                         </button>
                       );
                     })}

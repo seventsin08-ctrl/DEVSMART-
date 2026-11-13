@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { formatDate } from '@shared/constants';
-import { DEFAULT_SITE, makeSection, newId } from '@shared/site/defaults';
+import { DARK_THEME, DEFAULT_SITE, LIGHT_THEME, makeSection, newId } from '@shared/site/defaults';
 import { normalizeSiteDoc, validateSiteDoc } from '@shared/site/parse';
 import {
   LOCKED_SECTION_TYPES, PAGE_SLUGS, SECTION_LABELS, SECTION_TYPES, type PageSlug, type Section, type SectionType,
@@ -45,7 +45,7 @@ function SectionItem({ section, selected, onSelect, onToggle, onDuplicate, onRem
   const locked = LOCKED_SECTION_TYPES.includes(section.type);
   return (
     <Reorder.Item value={section} dragListener={false} dragControls={controls} as="li"
-      className={cx('flex items-center gap-1 rounded-xl border bg-[#0d1017] p-1.5', selected ? 'border-accent' : 'border-white/10', !section.visible && 'opacity-60')}>
+      className={cx('flex items-center gap-1 rounded-xl border bg-surface p-1.5', selected ? 'border-accent' : 'border-white/10', !section.visible && 'opacity-60')}>
       <button type="button" aria-label={`Drag to reorder ${SECTION_LABELS[section.type]}`} className="grid h-8 w-6 shrink-0 cursor-grab touch-none place-items-center text-muted active:cursor-grabbing" onPointerDown={(e) => controls.start(e)}><GripVertical className="h-4 w-4" /></button>
       <button type="button" onClick={onSelect} className="min-w-0 flex-1 px-1 py-1 text-left">
         <span className="flex items-center gap-1.5 text-sm font-medium">{SECTION_LABELS[section.type]}{locked && <Lock className="h-3 w-3 text-muted" aria-label="Built-in section" />}</span>
@@ -289,8 +289,11 @@ export default function Studio({ initialTab }: { initialTab: Tab | string }) {
       {tab === 'theme' && (
         <div>
           <FieldsEditor fields={THEME_FIELDS} value={doc.theme as unknown as Record<string, unknown>} path={['theme']} onChange={onChange} />
-          <Btn size="sm" variant="ghost" className="mt-4" onClick={() => update(['theme'], structuredClone(DEFAULT_SITE.theme), null)}><RotateCcw className="h-4 w-4" aria-hidden />Reset theme to DevMart default</Btn>
-          <p className="mt-3 text-[0.7rem] text-muted">The website is always dark. Keep text light and backgrounds dark for readable contrast.</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Btn size="sm" variant="secondary" onClick={() => update(['theme'], structuredClone(LIGHT_THEME), null)}><RotateCcw className="h-4 w-4" aria-hidden />Light preset</Btn>
+            <Btn size="sm" variant="secondary" onClick={() => update(['theme'], structuredClone(DARK_THEME), null)}><RotateCcw className="h-4 w-4" aria-hidden />Dark preset</Btn>
+          </div>
+          <p className="mt-3 text-[0.7rem] text-muted">Presets replace all theme settings (undo brings them back). Keep strong contrast between text and background so everything stays easy to read.</p>
         </div>
       )}
       {tab === 'navigation' && <FieldsEditor fields={NAV_FIELDS} value={doc.navigation as unknown as Record<string, unknown>} path={['navigation']} onChange={onChange} openGroups />}
@@ -343,7 +346,7 @@ export default function Studio({ initialTab }: { initialTab: Tab | string }) {
       <div className="flex min-h-0 flex-1">
         {/* ── editor panel ── */}
         <aside aria-label="Editor" style={{ '--panel': `${panelWidth}px` } as React.CSSProperties}
-          className={cx('min-h-0 w-full flex-col border-r border-white/10 bg-[#07090d]/90 backdrop-blur-xl lg:flex lg:w-[var(--panel)] lg:shrink-0', mobileView === 'editor' ? 'flex' : 'hidden')}>
+          className={cx('min-h-0 w-full flex-col border-r border-white/10 bg-surface/90 backdrop-blur-xl lg:flex lg:w-[var(--panel)] lg:shrink-0', mobileView === 'editor' ? 'flex' : 'hidden')}>
           <div className="scroll-thin flex gap-1 overflow-x-auto border-b border-white/10 p-2" role="tablist" aria-label="Editor sections">
             {TABS.map((t) => (
               <button key={t.id} role="tab" type="button" aria-selected={tab === t.id} onClick={() => { setTab(t.id); if (t.id !== 'sections') setSelected(t.id === 'navigation' ? 'nav' : t.id === 'footer' ? 'footer' : null); }}
@@ -360,7 +363,7 @@ export default function Studio({ initialTab }: { initialTab: Tab | string }) {
           className={cx('hidden w-1.5 shrink-0 cursor-col-resize bg-white/5 transition-colors hover:bg-accent/60 focus-visible:bg-accent lg:block', dragging && '!bg-accent')} />
 
         {/* ── live preview ── */}
-        <section aria-label="Live preview" className={cx('relative min-w-0 flex-1 bg-[#101318] lg:block', mobileView === 'preview' ? 'block' : 'hidden')}>
+        <section aria-label="Live preview" className={cx('relative min-w-0 flex-1 bg-surface lg:block', mobileView === 'preview' ? 'block' : 'hidden')}>
           <div ref={stage} className="absolute inset-0 flex items-start justify-center overflow-hidden">
             <iframe ref={frame} title="Live website preview" src="/__preview"
               onLoad={() => { /* the preview announces itself with a "ready" message */ }}

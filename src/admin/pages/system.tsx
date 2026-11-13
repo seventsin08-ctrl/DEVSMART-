@@ -92,7 +92,7 @@ export function OverviewPage() {
 
 // ───────── Analytics ─────────
 const PIE = ['#3b9eff', '#7dd3fc', '#a5b4fc', '#c7d2e3', '#34d399', '#fbbf24', '#f472b6', '#94a3b8'];
-const tooltipStyle = { background: '#0d1017', border: '1px solid rgba(255,255,255,.15)', borderRadius: 12, color: '#f5f7fa', fontSize: 13 };
+const tooltipStyle = { background: 'var(--dm-bg)', border: '1px solid color-mix(in srgb, var(--dm-text) 18%, transparent)', borderRadius: 12, color: 'var(--dm-text)', fontSize: 13 };
 
 export function AnalyticsPage() {
   const [from, setFrom] = useState(shift(-180));
@@ -141,11 +141,11 @@ export function AnalyticsPage() {
               <div className="h-64" role="img" aria-label="Bar chart of monthly verified revenue">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={monthly} margin={{ left: 0, right: 8, top: 4, bottom: 0 }}>
-                    <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
-                    <XAxis dataKey="month" stroke="#9aa4b2" fontSize={12} tickLine={false} />
-                    <YAxis stroke="#9aa4b2" fontSize={12} tickLine={false} width={64} tickFormatter={(v) => (v >= 1000 ? `${v / 1000}k` : String(v))} />
-                    <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(255,255,255,.05)' }} formatter={(v) => formatPHP(Math.round(Number(v) * 100))} />
-                    <Bar dataKey="Revenue" fill="#3b9eff" radius={[6, 6, 0, 0]} />
+                    <CartesianGrid stroke="color-mix(in srgb, var(--dm-text) 10%, transparent)" vertical={false} />
+                    <XAxis dataKey="month" stroke="var(--dm-muted)" fontSize={12} tickLine={false} />
+                    <YAxis stroke="var(--dm-muted)" fontSize={12} tickLine={false} width={64} tickFormatter={(v) => (v >= 1000 ? `${v / 1000}k` : String(v))} />
+                    <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'color-mix(in srgb, var(--dm-text) 6%, transparent)' }} formatter={(v) => formatPHP(Math.round(Number(v) * 100))} />
+                    <Bar dataKey="Revenue" fill="var(--dm-accent)" radius={[6, 6, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -155,11 +155,11 @@ export function AnalyticsPage() {
               <div className="h-64" role="img" aria-label="Line chart of monthly inquiries">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={monthly} margin={{ left: 0, right: 8, top: 4, bottom: 0 }}>
-                    <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
-                    <XAxis dataKey="month" stroke="#9aa4b2" fontSize={12} tickLine={false} />
-                    <YAxis stroke="#9aa4b2" fontSize={12} tickLine={false} width={36} allowDecimals={false} />
+                    <CartesianGrid stroke="color-mix(in srgb, var(--dm-text) 10%, transparent)" vertical={false} />
+                    <XAxis dataKey="month" stroke="var(--dm-muted)" fontSize={12} tickLine={false} />
+                    <YAxis stroke="var(--dm-muted)" fontSize={12} tickLine={false} width={36} allowDecimals={false} />
                     <Tooltip contentStyle={tooltipStyle} />
-                    <Line type="monotone" dataKey="Orders" stroke="#7dd3fc" strokeWidth={2.5} dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="Orders" stroke="var(--dm-accent)" strokeWidth={2.5} dot={{ r: 3 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>

@@ -288,21 +288,37 @@ const PAGES: Record<PageSlug, Page> = {
   },
 };
 
+const THEME_BASE = {
+  labels: { mono: true, numbered: true, rules: true },
+  fonts: { heading: 'system', body: 'system' },
+  scale: { base: 16, heading: 1 },
+  radius: { card: 18, button: 10 },
+} as const;
+
+/** Default look: white background, dark text, high contrast. */
+export const LIGHT_THEME: SiteDoc['theme'] = {
+  ...THEME_BASE,
+  mode: 'light',
+  colors: { background: '#ffffff', surface: '#ffffff', text: '#0b1020', muted: '#4b5565', accent: '#1f4fd8', accent2: '#64748b' },
+  gradient: { from: '#0b1020', via: '#1f4fd8', to: '#3b82f6', angle: 100, animated: true },
+  background: { style: 'spotlight', intensity: 30, animated: true },
+  glass: { opacity: 0, blur: 20, border: 14, saturation: 140 },
+  shadow: { intensity: 18 },
+};
+
+/** Optional dark look (Theme → Appearance in the studio). */
+export const DARK_THEME: SiteDoc['theme'] = {
+  ...THEME_BASE,
+  mode: 'dark',
+  colors: { background: '#000000', surface: '#0a0c11', text: '#f5f7fa', muted: '#9aa4b2', accent: '#2f6bff', accent2: '#c7d2e3' },
+  gradient: { from: '#ffffff', via: '#9cc9ff', to: '#2f6bff', angle: 100, animated: true },
+  background: { style: 'spotlight', intensity: 35, animated: true },
+  glass: { opacity: 6, blur: 24, border: 12, saturation: 160 },
+  shadow: { intensity: 55 },
+};
+
 export const DEFAULT_SITE: SiteDoc = {
-  theme: {
-    colors: {
-      background: '#000000', surface: '#0a0c11', text: '#f5f7fa', muted: '#9aa4b2',
-      accent: '#2f6bff', accent2: '#c7d2e3',
-    },
-    gradient: { from: '#ffffff', via: '#9cc9ff', to: '#2f6bff', angle: 100, animated: true },
-    labels: { mono: true, numbered: true, rules: true },
-    background: { style: 'spotlight', intensity: 35, animated: true },
-    fonts: { heading: 'system', body: 'system' },
-    scale: { base: 16, heading: 1 },
-    glass: { opacity: 6, blur: 24, border: 12, saturation: 160 },
-    radius: { card: 18, button: 10 },
-    shadow: { intensity: 55 },
-  },
+  theme: LIGHT_THEME,
   brand: {
     name: 'DevMart',
     tagline: 'Your ideas. Beautifully built.',

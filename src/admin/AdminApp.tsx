@@ -56,7 +56,7 @@ function Sidebar({ onNavigate, unread }: { onNavigate?: () => void; unread: numb
                     className={({ isActive }) => cx('flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors', isActive ? 'bg-white/12 font-medium text-ink shadow-[inset_0_1px_0_rgba(255,255,255,.12)]' : 'text-ink/70 hover:bg-white/5 hover:text-ink')}>
                     <n.icon className="h-4 w-4 shrink-0" aria-hidden />
                     <span className="flex-1 truncate">{n.label}</span>
-                    {n.to === 'notifications' && unread > 0 && <span className="rounded-full bg-accent px-1.5 text-xs font-semibold text-white" aria-label={`${unread} unread`}>{unread > 99 ? '99+' : unread}</span>}
+                    {n.to === 'notifications' && unread > 0 && <span className="rounded-full bg-accent px-1.5 text-xs font-semibold text-[#fff]" aria-label={`${unread} unread`}>{unread > 99 ? '99+' : unread}</span>}
                   </NavLink>
                 </li>
               ))}
@@ -91,7 +91,7 @@ function Dashboard({ email }: { email: string }) {
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <aside className="glass absolute inset-y-0 left-0 w-72 max-w-[85vw] !rounded-none !bg-[#0b0e14]/95">
+          <aside className="glass absolute inset-y-0 left-0 w-72 max-w-[85vw] !rounded-none !bg-surface/95">
             <button type="button" aria-label="Close menu" className="absolute right-3 top-4 grid h-9 w-9 place-items-center rounded-full bg-white/10" onClick={() => setOpen(false)}><X className="h-4 w-4" /></button>
             <Sidebar unread={unread} onNavigate={() => setOpen(false)} />
           </aside>

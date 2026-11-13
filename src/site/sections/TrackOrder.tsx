@@ -155,7 +155,7 @@ export function TrackOrderSection() {
               const current = s === order.status;
               return (
                 <li key={s} className={cx('flex min-w-[8.5rem] flex-1 flex-col gap-2 rounded-2xl border p-3 text-xs', current ? 'border-accent bg-accent/15' : done ? 'border-white/15 bg-white/5' : 'border-white/10 opacity-55')} aria-current={current ? 'step' : undefined}>
-                  <span className={cx('grid h-6 w-6 place-items-center rounded-full', done ? 'bg-accent text-white' : current ? 'bg-accent/30 text-ink' : 'bg-white/10')}>{done ? <Check className="h-3.5 w-3.5" aria-hidden /> : current ? <CircleDot className="h-3.5 w-3.5" aria-hidden /> : i + 1}</span>
+                  <span className={cx('grid h-6 w-6 place-items-center rounded-full', done ? 'bg-accent text-[#fff]' : current ? 'bg-accent/30 text-ink' : 'bg-white/10')}>{done ? <Check className="h-3.5 w-3.5" aria-hidden /> : current ? <CircleDot className="h-3.5 w-3.5" aria-hidden /> : i + 1}</span>
                   <span className="font-medium leading-tight">{ORDER_STATUS_LABELS[s]}</span>
                 </li>
               );

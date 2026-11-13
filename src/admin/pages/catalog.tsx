@@ -121,7 +121,7 @@ function PriceCell({ table, row, column }: { table: string; row: Row; column: st
     <form className="flex items-center justify-end gap-2" onSubmit={(e) => { e.preventDefault(); if (dirty) save.mutate(); }}>
       <span className="text-muted" aria-hidden>₱</span>
       <input className="field field-sm !w-32 text-right" inputMode="decimal" aria-label={`Price for ${row.name}`} value={value} onChange={(e) => setValue(e.target.value)} />
-      <button type="submit" disabled={!dirty || save.isPending} aria-label="Save price" className="grid h-8 w-8 place-items-center rounded-full bg-accent text-white disabled:bg-white/10 disabled:text-muted"><Check className="h-4 w-4" /></button>
+      <button type="submit" disabled={!dirty || save.isPending} aria-label="Save price" className="grid h-8 w-8 place-items-center rounded-full bg-accent text-[#fff] disabled:bg-white/10 disabled:text-muted"><Check className="h-4 w-4" /></button>
     </form>
   );
 }
