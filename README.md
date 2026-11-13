@@ -77,7 +77,7 @@ Prefer doing it by hand? Run `insert into admin_roles (email, role) values ('you
 | `SUPABASE_URL` | functions | same Project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | functions only | **secret** — never prefix with `VITE_` |
 | `SITE_URL` | functions | your public URL, e.g. `https://devmart.netlify.app` |
-| `IP_HASH_SALT` | functions | any long random string |
+| `IP_HASH_SALT` | functions | optional: random string for hashing visitor IPs (defaults to the service-role key) |
 | `RESEND_API_KEY`, `EMAIL_FROM`, `ADMIN_NOTIFY_EMAIL` | functions | optional — transactional email |
 | `VITE_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | browser / functions | optional — Cloudflare Turnstile on public forms |
 

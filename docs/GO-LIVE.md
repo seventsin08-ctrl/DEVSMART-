@@ -39,8 +39,8 @@ You need three free accounts: **GitHub** (your code is already there), **Supabas
    | `VITE_SUPABASE_ANON_KEY` | anon / publishable key | public |
    | `SUPABASE_URL` | Project URL | same as above |
    | `SUPABASE_SERVICE_ROLE_KEY` | service_role / secret key | tick **Contains secret values** |
-   | `IP_HASH_SALT` | any long random text (30+ characters) | tick **Contains secret values** |
 
+   (`IP_HASH_SALT` is optional. Without it the site uses your secret key to scramble stored visitor IP addresses.)
 3. Press **Deploy**. After a minute or two you get an address like `https://something.netlify.app`. (The *Project name* at the top of the setup screen decides that address.)
 4. Optional: `SITE_URL`. The site already builds tracking links from the address people visit, so you can skip this. Set it (for example `https://your-domain.com`, no slash at the end) only if you want links to always use one specific address, then redeploy.
 

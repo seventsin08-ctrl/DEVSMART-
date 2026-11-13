@@ -108,9 +108,12 @@ export function clientIp(req: Request, context: Context): string {
   );
 }
 
-/** One-way hash so raw visitor IPs are never stored. */
+/**
+ * One-way hash so raw visitor IPs are never stored. The HMAC key is IP_HASH_SALT when set,
+ * otherwise the service-role key (always present in production, never public, never output).
+ */
 export function hashIp(ip: string): string {
-  const salt = process.env.IP_HASH_SALT ?? 'devmart-default-salt';
+  const salt = process.env.IP_HASH_SALT || process.env.SUPABASE_SERVICE_ROLE_KEY || 'devmart-default-salt';
   return crypto.createHmac('sha256', salt).update(ip).digest('hex').slice(0, 40);
 }
 
